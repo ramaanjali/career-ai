@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>PDF AI Assistant</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+
+    <style>
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .top-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            position: relative;
+
+            z-index: 1000;
+
+        }
+
+
+        .header-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            position: relative;
+
+        }
+
+
+        /* =====================================================
+           AI STATUS
+        ===================================================== */
+
+        .ai-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            white-space: nowrap;
+
+        }
+
+
+        .status-dot {
+
+            width: 9px;
+
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            display: inline-block;
+
+        }
+
+
+        /* =====================================================
+           PROFILE BUTTON
+        ===================================================== */
+
+        .profile-button {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            border: 1px solid #e5e7eb;
+
+            background: #ffffff;
+
+            border-radius: 12px;
+
+            padding: 7px 12px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            color: #111827;
+
+            transition: .2s ease;
+
+        }
+
+
+        .profile-button:hover {
+
+            background: #f8fafc;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .profile-avatar {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: linear-gradient(
+                135deg,
+                #6d4aff,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-weight: 700;
+
+            font-size: 15px;
+
+        }
+
+
+        .profile-button-name {
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================================
+           PROFILE DROPDOWN
+        ===================================================== */
+
+        .profile-dropdown {
+
+            position: absolute;
+
+            right: 0;
+
+            top: 52px;
+
+            width: 220px;
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 8px;
+
+            box-shadow:
+                0 15px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    .15
+                );
+
+            display: none;
+
+            z-index: 9999;
+
+        }
+
+
+        .profile-dropdown.show {
+
+            display: block;
+
+        }
+
+
+        .profile-menu-item {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 11px 12px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            box-sizing: border-box;
+
+            text-align: left;
+
+        }
+
+
+        .profile-menu-item:hover {
+
+            background: #f3f4f6;
+
+        }
+
+
+        .logout-item {
+
+            color: #dc2626;
+
+        }
+
+
+        .logout-item:hover {
+
+            background: #fef2f2;
+
+        }
+
+
+        .profile-divider {
+
+            height: 1px;
+
+            background: #eeeeee;
+
+            margin: 5px 0;
+
+        }
+
+
+        /* =====================================================
+           MODAL BACKGROUND
+        ===================================================== */
+
+        .app-modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(
+                0,
+                0,
+                0,
+                .45
+            );
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            z-index: 20000;
+
+            padding: 20px;
+
+        }
+
+
+        .app-modal.show {
+
+            display: flex;
+
+        }
+
+
+        /* =====================================================
+           MODAL CARD
+        ===================================================== */
+
+        .modal-card {
+
+            width: min(
+                430px,
+                100%
+            );
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 25px 60px rgba(
+                    0,
+                    0,
+                    0,
+                    .22
+                );
+
+            position: relative;
+
+            box-sizing: border-box;
+
+        }
+
+
+        .modal-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .modal-header h2 {
+
+            margin: 0;
+
+            font-size: 22px;
+
+            color: #111827;
+
+        }
+
+
+        .modal-close {
+
+            border: none;
+
+            background: #f3f4f6;
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            line-height: 1;
+
+        }
+
+
+        .modal-close:hover {
+
+            background: #e5e7eb;
+
+        }
+
+
+        /* =====================================================
+           PROFILE DETAILS
+        ===================================================== */
+
+        .profile-large-avatar {
+
+            width: 75px;
+
+            height: 75px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: linear-gradient(
+                135deg,
+                #6d4aff,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+        }
+
+
+        .profile-details {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+
+        }
+
+
+        .profile-detail {
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            padding: 12px 14px;
+
+        }
+
+
+        .profile-detail-label {
+
+            display: block;
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .profile-detail-value {
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            color: #111827;
+
+            word-break: break-word;
+
+        }
+
+
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
+
+        .setting-row {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #eeeeee;
+
+        }
+
+
+        .setting-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .setting-title {
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            color: #111827;
+
+        }
+
+
+        .setting-description {
+
+            margin-top: 3px;
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+        }
+
+
+        .setting-select {
+
+            padding: 8px 10px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: white;
+
+            cursor: pointer;
+
+        }
+
+
+        .setting-toggle {
+
+            width: 48px;
+
+            height: 26px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            background: #d1d5db;
+
+            position: relative;
+
+            cursor: pointer;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .setting-toggle::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 20px;
+
+            height: 20px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            top: 3px;
+
+            left: 4px;
+
+            transition: .2s;
+
+        }
+
+
+        .setting-toggle.active {
+
+            background: #6d4aff;
+
+        }
+
+
+        .setting-toggle.active::after {
+
+            left: 24px;
+
+        }
+
+
+        /* =====================================================
+           DARK MODE
+        ===================================================== */
+
+        body.dark-mode {
+
+            background: #111827;
+
+            color: #f9fafb;
+
+        }
+
+
+        body.dark-mode .profile-button {
+
+            background: #1f2937;
+
+            color: white;
+
+            border-color: #374151;
+
+        }
+
+
+        body.dark-mode .profile-dropdown {
+
+            background: #1f2937;
+
+            border-color: #374151;
+
+        }
+
+
+        body.dark-mode .profile-menu-item {
+
+            color: #e5e7eb;
+
+        }
+
+
+        body.dark-mode .profile-menu-item:hover {
+
+            background: #374151;
+
+        }
+
+
+        body.dark-mode .modal-card {
+
+            background: #1f2937;
+
+        }
+
+
+        body.dark-mode .modal-header h2 {
+
+            color: white;
+
+        }
+
+
+        body.dark-mode .profile-detail {
+
+            background: #374151;
+
+        }
+
+
+        body.dark-mode .profile-detail-label {
+
+            color: #d1d5db;
+
+        }
+
+
+        body.dark-mode .profile-detail-value {
+
+            color: white;
+
+        }
+
+
+        body.dark-mode .setting-title {
+
+            color: white;
+
+        }
+
+
+        body.dark-mode .setting-description {
+
+            color: #d1d5db;
+
+        }
+
+
+        body.dark-mode .setting-row {
+
+            border-color: #374151;
+
+        }
+
+
+        body.dark-mode .setting-select {
+
+            background: #1f2937;
+
+            color: white;
+
+            border-color: #4b5563;
+
+        }
+
+
+        /* =====================================================
+           LARGE TEXT
+        ===================================================== */
+
+        body.large-text .hero-description,
+
+        body.large-text .feature-card p,
+
+        body.large-text .step p {
+
+            font-size: 18px;
+
+        }
+
+
+        /* =====================================================
+           ANIMATION OFF
+        ===================================================== */
+
+        body.no-animations * {
+
+            animation: none !important;
+
+            transition: none !important;
+
+            scroll-behavior: auto !important;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .profile-button-name {
+
+                display: none;
+
+            }
+
+
+            .ai-status {
+
+                display: none;
+
+            }
+
+
+            .profile-dropdown {
+
+                right: 0;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PDF TOOL NAVIGATION - ADDED WITHOUT CHANGING OLD CLASSES/IDS
+        ===================================================== */
+
+        .pdf-tool-navigation {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px 18px;
+            box-sizing: border-box;
+        }
+
+        .pdf-tool-navigation-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 10px;
+            background: rgba(255,255,255,.92);
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(15,23,42,.06);
+        }
+
+        .pdf-tool-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .pdf-tool-nav-link:hover {
+            background: #f3f4f6;
+            color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .pdf-tool-nav-link.active {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        body.dark-mode .pdf-tool-navigation-inner {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        body.dark-mode .pdf-tool-nav-link {
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .pdf-tool-nav-link:hover {
+            background: #374151;
+            color: white;
+        }
+
+        body.dark-mode .pdf-tool-nav-link.active {
+            background: #312e81;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+            .pdf-tool-navigation {
+                padding: 0 14px 14px;
+            }
+
+            .pdf-tool-navigation-inner {
+                justify-content: center;
+            }
+
+            .pdf-tool-nav-link {
+                flex: 1 1 42%;
+                justify-content: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP HEADER
+========================================================= -->
+
+<header class="top-header">
+
+
+    <!-- LEFT -->
+
+    <div>
+
+        <h1>
+            PDF AI Assistant
+        </h1>
+
+        <p>
+            Your intelligent PDF study companion
+        </p>
+
+    </div>
+
+
+    <!-- RIGHT -->
+
+    <div class="header-right">
+
+
+        <!-- AI STATUS -->
+
+        <div class="ai-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                AI Ready
+            </span>
+
+        </div>
+
+
+        <!-- PROFILE BUTTON -->
+
+        <button
+            type="button"
+            class="profile-button"
+            id="profileButton">
+
+
+            <span class="profile-avatar">
+
+                {{
+                    session.get(
+                        "name",
+                        "U"
+                    )[0].upper()
+                }}
+
+            </span>
+
+
+            <span class="profile-button-name">
+
+                {{
+                    session.get(
+                        "name",
+                        "User"
+                    )
+                }}
+
+            </span>
+
+
+            <span>
+                ▼
+            </span>
+
+
+        </button>
+
+
+        <!-- PROFILE DROPDOWN -->
+
+        <div
+            class="profile-dropdown"
+            id="profileDropdown">
+
+
+            <!-- PROFILE -->
+
+            <button
+                type="button"
+                class="profile-menu-item"
+                id="profileMenuBtn">
+
+                <span>
+                    👤
+                </span>
+
+                <span>
+                    My Profile
+                </span>
+
+            </button>
+
+
+            <!-- SETTINGS -->
+
+            <button
+                type="button"
+                class="profile-menu-item"
+                id="settingsMenuBtn">
+
+                <span>
+                    ⚙️
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </button>
+
+
+            <div class="profile-divider"></div>
+
+
+            <!-- LOGOUT -->
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="profile-menu-item logout-item">
+
+                <span>
+                    🚪
+                </span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+
+<!-- =========================================================
+     PDF TOOL NAVIGATION
+     Added without changing existing class/id names
+========================================================= -->
+
+<nav class="pdf-tool-navigation" aria-label="PDF tool navigation">
+    <div class="pdf-tool-navigation-inner">
+
+        <a href="{{ url_for('home') }}" class="pdf-tool-nav-link">
+            🏠 Home
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="pdf-tool-nav-link">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('history') }}" class="pdf-tool-nav-link">
+            🕘 PDF History
+        </a>
+
+        {% if session.get('pdf_id') %}
+        <a href="{{ url_for('qa_history_page', pdf_id=session.get('pdf_id')) }}" class="pdf-tool-nav-link">
+            💬 AI Assistant
+        </a>
+        {% else %}
+        <a href="{{ url_for('history') }}" class="pdf-tool-nav-link">
+            💬 AI Assistant
+        </a>
+        {% endif %}
+
+        <a href="{{ url_for('pdf_summarizer') }}" class="pdf-tool-nav-link active">
+            📤 Upload PDF
+        </a>
+
+    </div>
+</nav>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <section class="hero">
+
+
+        <div class="hero-container">
+
+
+            <!-- LEFT -->
+
+            <div class="hero-content">
+
+
+                <div class="badge">
+
+                    ✨ AI-Powered Learning
+
+                </div>
+
+
+                <h2>
+
+                    Turn Your PDF Into
+
+                    <span>
+                        Knowledge
+                    </span>
+
+                </h2>
+
+
+                <p class="hero-description">
+
+                    Upload your study material and let
+                    AI summarize, analyze and answer
+                    questions from your PDF.
+
+                </p>
+
+
+                <!-- QUICK FEATURES -->
+
+                <div class="quick-features">
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            🧠
+                        </span>
+
+                        <span>
+                            AI Analysis
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            📝
+                        </span>
+
+                        <span>
+                            Smart Summary
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            💬
+                        </span>
+
+                        <span>
+                            PDF Q&A
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 UPLOAD CARD
+            ================================================= -->
+
+            <div class="upload-card">
+
+
+                <div class="upload-card-header">
+
+
+                    <div class="upload-main-icon">
+                        📄
+                    </div>
+
+
+                    <h2>
+                        Upload Your PDF
+                    </h2>
+
+
+                    <p>
+                        Start analyzing your document
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- UPLOAD FORM -->
+
+                <form
+                    action="/upload"
+                    method="POST"
+                    enctype="multipart/form-data">
+
+
+                    <div class="upload-box">
+
+
+                        <div class="cloud-icon">
+                            ☁️
+                        </div>
+
+
+                        <h3>
+                            Select your PDF
+                        </h3>
+
+
+                        <p>
+                            Choose a PDF file from your computer
+                        </p>
+
+
+                        <label
+                            for="pdf_file"
+                            class="browse-button">
+
+                            📁 Browse PDF
+
+                        </label>
+
+
+                        <input
+                            type="file"
+                            id="pdf_file"
+                            name="pdf_file"
+                            accept=".pdf,application/pdf"
+                            required>
+
+
+                        <div class="file-info">
+
+                            PDF files only
+
+                            <span>
+                                •
+                            </span>
+
+                            Recommended under 100 MB
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- FILE PREVIEW -->
+
+                    <div
+                        id="file-preview"
+                        class="file-preview">
+
+
+                        <span class="preview-icon">
+                            📄
+                        </span>
+
+
+                        <span
+                            id="file-name"
+                            class="file-name">
+
+                            No file selected
+
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- UPLOAD BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="upload-button">
+
+                        <span>
+                            🚀
+                        </span>
+
+                        Upload & Analyze
+
+                    </button>
+
+
+                </form>
+
+
+                <div class="secure-text">
+
+                    🔒 Your document is processed securely
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FEATURES
+    ===================================================== -->
+
+    <section class="features">
+
+
+        <div class="section-title">
+
+
+            <span>
+                POWERFUL FEATURES
+            </span>
+
+
+            <h2>
+                Everything You Need to Study
+            </h2>
+
+
+            <p>
+                Transform long PDFs into easy-to-understand
+                study material.
+            </p>
+
+
+        </div>
+
+
+
+        <div class="feature-grid">
+
+
+            <!-- FEATURE 1 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    AI Analysis
+                </h3>
+
+                <p>
+                    Analyze your PDF and understand
+                    the most important information.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 2 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📝
+                </div>
+
+                <h3>
+                    Smart Summary
+                </h3>
+
+                <p>
+                    Convert lengthy documents into
+                    simple summaries.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    💡
+                </div>
+
+                <h3>
+                    Key Concepts
+                </h3>
+
+                <p>
+                    Automatically identify important
+                    concepts from your PDF.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 4 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📖
+                </div>
+
+                <h3>
+                    Chapter Summary
+                </h3>
+
+                <p>
+                    Understand chapters and major
+                    sections quickly.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 5 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ❓
+                </div>
+
+                <h3>
+                    Important Questions
+                </h3>
+
+                <p>
+                    Generate useful questions for
+                    exam preparation.
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 6 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    💬
+                </div>
+
+                <h3>
+                    Smart PDF Q&A
+                </h3>
+
+                <p>
+                    Ask questions about your document
+                    and get relevant answers.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ===================================================== -->
+
+    <section class="how-it-works">
+
+
+        <div class="section-title">
+
+
+            <span>
+                SIMPLE PROCESS
+            </span>
+
+
+            <h2>
+                How It Works
+            </h2>
+
+
+            <p>
+                Learn from your PDF in four simple steps.
+            </p>
+
+
+        </div>
+
+
+
+        <div class="steps">
+
+
+            <!-- STEP 01 -->
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Upload
+                </h3>
+
+                <p>
+                    Select your PDF document.
+                </p>
+
+            </div>
+
+
+            <div class="step-arrow">
+                →
+            </div>
+
+
+            <!-- STEP 02 -->
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Extract
+                </h3>
+
+                <p>
+                    Text is extracted from the PDF.
+                </p>
+
+            </div>
+
+
+            <div class="step-arrow">
+                →
+            </div>
+
+
+            <!-- STEP 03 -->
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Analyze
+                </h3>
+
+                <p>
+                    AI analyzes the document.
+                </p>
+
+            </div>
+
+
+            <div class="step-arrow">
+                →
+            </div>
+
+
+            <!-- STEP 04 -->
+
+            <div class="step">
+
+                <div class="step-number">
+                    04
+                </div>
+
+                <h3>
+                    Learn
+                </h3>
+
+                <p>
+                    Read, ask and learn.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+
+    <div>
+
+        <h3>
+            📚 PDF AI Assistant
+        </h3>
+
+        <p>
+            Your intelligent PDF study companion.
+        </p>
+
+    </div>
+
+
+    <div>
+
+        © 2026 PDF AI Assistant
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =========================================================
+     PROFILE MODAL
+========================================================= -->
+
+<div
+    class="app-modal"
+    id="profileModal">
+
+
+    <div class="modal-card">
+
+
+        <div class="modal-header">
+
+
+            <h2>
+                My Profile
+            </h2>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeProfileModal">
+
+                ×
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- AVATAR -->
+
+        <div class="profile-large-avatar">
+
+            {{
+                session.get(
+                    "name",
+                    "U"
+                )[0].upper()
+            }}
+
+        </div>
+
+
+
+        <!-- DETAILS -->
+
+        <div class="profile-details">
+
+
+            <div class="profile-detail">
+
+                <span class="profile-detail-label">
+                    Full Name
+                </span>
+
+                <span class="profile-detail-value">
+
+                    {{
+                        session.get(
+                            "name",
+                            "Not available"
+                        )
+                    }}
+
+                </span>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <span class="profile-detail-label">
+                    Username
+                </span>
+
+                <span class="profile-detail-value">
+
+                    {{
+                        session.get(
+                            "username",
+                            "Not available"
+                        )
+                    }}
+
+                </span>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <span class="profile-detail-label">
+                    Email
+                </span>
+
+                <span class="profile-detail-value">
+
+                    {{
+                        session.get(
+                            "email",
+                            "Not available"
+                        )
+                    }}
+
+                </span>
+
+            </div>
+
+
+            <div class="profile-detail">
+
+                <span class="profile-detail-label">
+                    Application
+                </span>
+
+                <span class="profile-detail-value">
+
+                    PDF AI Assistant
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SETTINGS MODAL
+========================================================= -->
+
+<div
+    class="app-modal"
+    id="settingsModal">
+
+
+    <div class="modal-card">
+
+
+        <div class="modal-header">
+
+
+            <h2>
+                Settings
+            </h2>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeSettingsModal">
+
+                ×
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- DARK MODE -->
+
+        <div class="setting-row">
+
+
+            <div>
+
+                <div class="setting-title">
+                    Dark Mode
+                </div>
+
+                <div class="setting-description">
+                    Change the appearance of the application.
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="setting-toggle"
+                id="darkModeToggle">
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- TEXT SIZE -->
+
+        <div class="setting-row">
+
+
+            <div>
+
+                <div class="setting-title">
+                    Text Size
+                </div>
+
+                <div class="setting-description">
+                    Choose your preferred text size.
+                </div>
+
+            </div>
+
+
+            <select
+                class="setting-select"
+                id="fontSizeSelect">
+
+                <option value="normal">
+                    Normal
+                </option>
+
+                <option value="large">
+                    Large
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- ANIMATIONS -->
+
+        <div class="setting-row">
+
+
+            <div>
+
+                <div class="setting-title">
+                    Animations
+                </div>
+
+                <div class="setting-description">
+                    Enable or disable interface animations.
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="setting-toggle active"
+                id="animationToggle">
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   FILE PREVIEW
+========================================================= */
+
+const fileInput =
+    document.getElementById(
+        "pdf_file"
+    );
+
+
+const fileName =
+    document.getElementById(
+        "file-name"
+    );
+
+
+const filePreview =
+    document.getElementById(
+        "file-preview"
+    );
+
+
+if (fileInput) {
+
+    fileInput.addEventListener(
+        "change",
+        function () {
+
+            if (
+                this.files &&
+                this.files.length > 0
+            ) {
+
+                const file =
+                    this.files[0];
+
+
+                fileName.textContent =
+                    file.name;
+
+
+                filePreview.classList.add(
+                    "active"
+                );
+
+            }
+
+            else {
+
+                fileName.textContent =
+                    "No file selected";
+
+
+                filePreview.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+========================================================= */
+
+const profileButton =
+    document.getElementById(
+        "profileButton"
+    );
+
+
+const profileDropdown =
+    document.getElementById(
+        "profileDropdown"
+    );
+
+
+if (
+    profileButton &&
+    profileDropdown
+) {
+
+    profileButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+
+            profileDropdown.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   OUTSIDE CLICK
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+
+        if (
+            profileDropdown &&
+            profileButton &&
+            !profileDropdown.contains(
+                event.target
+            ) &&
+            !profileButton.contains(
+                event.target
+            )
+        ) {
+
+            profileDropdown.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   PROFILE MODAL
+========================================================= */
+
+const profileMenuBtn =
+    document.getElementById(
+        "profileMenuBtn"
+    );
+
+
+const profileModal =
+    document.getElementById(
+        "profileModal"
+    );
+
+
+const closeProfileModal =
+    document.getElementById(
+        "closeProfileModal"
+    );
+
+
+if (
+    profileMenuBtn &&
+    profileModal
+) {
+
+    profileMenuBtn.addEventListener(
+        "click",
+        function () {
+
+
+            profileDropdown.classList.remove(
+                "show"
+            );
+
+
+            profileModal.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+if (closeProfileModal) {
+
+    closeProfileModal.addEventListener(
+        "click",
+        function () {
+
+            profileModal.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   SETTINGS MODAL
+========================================================= */
+
+const settingsMenuBtn =
+    document.getElementById(
+        "settingsMenuBtn"
+    );
+
+
+const settingsModal =
+    document.getElementById(
+        "settingsModal"
+    );
+
+
+const closeSettingsModal =
+    document.getElementById(
+        "closeSettingsModal"
+    );
+
+
+if (
+    settingsMenuBtn &&
+    settingsModal
+) {
+
+    settingsMenuBtn.addEventListener(
+        "click",
+        function () {
+
+
+            profileDropdown.classList.remove(
+                "show"
+            );
+
+
+            settingsModal.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+if (closeSettingsModal) {
+
+    closeSettingsModal.addEventListener(
+        "click",
+        function () {
+
+            settingsModal.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   CLOSE MODAL OUTSIDE
+========================================================= */
+
+if (profileModal) {
+
+    profileModal.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                profileModal
+            ) {
+
+                profileModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+if (settingsModal) {
+
+    settingsModal.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                settingsModal
+            ) {
+
+                settingsModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+const darkModeToggle =
+    document.getElementById(
+        "darkModeToggle"
+    );
+
+
+function applyDarkMode(
+    enabled
+) {
+
+
+    document.body.classList.toggle(
+        "dark-mode",
+        enabled
+    );
+
+
+    if (darkModeToggle) {
+
+        darkModeToggle.classList.toggle(
+            "active",
+            enabled
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "pdf_ai_dark_mode",
+        enabled
+            ? "true"
+            : "false"
+    );
+
+}
+
+
+
+/* LOAD DARK MODE */
+
+const savedDarkMode =
+    localStorage.getItem(
+        "pdf_ai_dark_mode"
+    );
+
+
+if (
+    savedDarkMode === "true"
+) {
+
+    applyDarkMode(
+        true
+    );
+
+}
+
+else {
+
+    applyDarkMode(
+        false
+    );
+
+}
+
+
+
+/* TOGGLE DARK MODE */
+
+if (darkModeToggle) {
+
+    darkModeToggle.addEventListener(
+        "click",
+        function () {
+
+
+            const enabled =
+                !document.body.classList.contains(
+                    "dark-mode"
+                );
+
+
+            applyDarkMode(
+                enabled
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   FONT SIZE
+========================================================= */
+
+const fontSizeSelect =
+    document.getElementById(
+        "fontSizeSelect"
+    );
+
+
+function applyFontSize(
+    size
+) {
+
+
+    document.body.classList.toggle(
+        "large-text",
+        size === "large"
+    );
+
+
+    if (fontSizeSelect) {
+
+        fontSizeSelect.value =
+            size;
+
+    }
+
+
+    localStorage.setItem(
+        "pdf_ai_font_size",
+        size
+    );
+
+}
+
+
+const savedFontSize =
+    localStorage.getItem(
+        "pdf_ai_font_size"
+    ) || "normal";
+
+
+applyFontSize(
+    savedFontSize
+);
+
+
+if (fontSizeSelect) {
+
+    fontSizeSelect.addEventListener(
+        "change",
+        function () {
+
+            applyFontSize(
+                this.value
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+const animationToggle =
+    document.getElementById(
+        "animationToggle"
+    );
+
+
+function applyAnimations(
+    enabled
+) {
+
+
+    document.body.classList.toggle(
+        "no-animations",
+        !enabled
+    );
+
+
+    if (animationToggle) {
+
+        animationToggle.classList.toggle(
+            "active",
+            enabled
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "pdf_ai_animation",
+        enabled
+            ? "true"
+            : "false"
+    );
+
+}
+
+
+const savedAnimation =
+    localStorage.getItem(
+        "pdf_ai_animation"
+    );
+
+
+if (
+    savedAnimation === "false"
+) {
+
+    applyAnimations(
+        false
+    );
+
+}
+
+else {
+
+    applyAnimations(
+        true
+    );
+
+}
+
+
+if (animationToggle) {
+
+    animationToggle.addEventListener(
+        "click",
+        function () {
+
+
+            const enabled =
+                !this.classList.contains(
+                    "active"
+                );
+
+
+            applyAnimations(
+                enabled
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+
+            if (profileModal) {
+
+                profileModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+
+            if (settingsModal) {
+
+                settingsModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+
+            if (profileDropdown) {
+
+                profileDropdown.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

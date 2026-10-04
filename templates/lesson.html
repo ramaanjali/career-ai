@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ lesson.title }} | CareerAI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='lesson.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="lesson-header">
+
+    <a
+        href="{{ url_for(
+            'course_detail',
+            course_id=course.id
+        ) }}"
+        class="back-link"
+    >
+        ← Back to Course
+    </a>
+
+
+    <div class="brand">
+        ✦ CareerAI
+    </div>
+
+</header>
+
+
+
+<main class="lesson-container">
+
+
+    <div class="lesson-breadcrumb">
+
+        {{ course.title }}
+
+        <span>
+            /
+        </span>
+
+        {{ lesson.title }}
+
+    </div>
+
+
+    <article class="lesson-card">
+
+
+        <span class="lesson-label">
+            LESSON
+        </span>
+
+
+        <h1>
+            {{ lesson.title }}
+        </h1>
+
+
+        <div class="lesson-content">
+
+            <p>
+                {{ lesson.content }}
+            </p>
+
+
+            {% if lesson.example %}
+
+            <h2>
+                Example
+            </h2>
+
+            <div class="example-box">
+                {{ lesson.example }}
+            </div>
+
+            {% endif %}
+
+
+            {% if lesson.code %}
+
+            <h2>
+                Code Example
+            </h2>
+
+            <pre><code>{{ lesson.code }}</code></pre>
+
+            {% endif %}
+
+
+            
+
+        <div class="lesson-actions">
+
+            <a
+                href="{{ url_for(
+                    'course_detail',
+                    course_id=course.id
+                ) }}"
+                class="secondary-button"
+            >
+                Course Content
+            </a>
+
+
+            <button
+                id="completeButton"
+                class="complete-button"
+            >
+                ✓ Mark as Complete
+            </button>
+
+        </div>
+
+
+        <div
+            id="completeMessage"
+            class="complete-message"
+        >
+            Lesson completed successfully! 🎉
+        </div>
+
+
+    </article>
+
+</main>
+
+
+
+<script>
+
+    const courseId =
+        "{{ course.id }}";
+
+
+    const lessonId =
+        "{{ lesson.id }}";
+
+
+    const storageKey =
+        "careerai_completed_" +
+        courseId;
+
+
+    function getCompleted() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(
+                    storageKey
+                )
+            ) || [];
+
+        } catch (error) {
+
+            return [];
+
+        }
+
+    }
+
+
+    function saveCompleted(list) {
+
+        localStorage.setItem(
+            storageKey,
+            JSON.stringify(list)
+        );
+
+    }
+
+
+    const completeButton =
+        document.getElementById(
+            "completeButton"
+        );
+
+
+    const completeMessage =
+        document.getElementById(
+            "completeMessage"
+        );
+
+
+    function updateButton() {
+
+        const completed =
+            getCompleted();
+
+
+        if (
+            completed.includes(
+                lessonId
+            )
+        ) {
+
+            completeButton.textContent =
+                "✓ Completed";
+
+            completeButton.classList.add(
+                "completed"
+            );
+
+            completeMessage.classList.add(
+                "show"
+            );
+
+        }
+
+    }
+
+
+    completeButton.addEventListener(
+        "click",
+        function () {
+
+            let completed =
+                getCompleted();
+
+
+            if (
+                !completed.includes(
+                    lessonId
+                )
+            ) {
+
+                completed.push(
+                    lessonId
+                );
+
+                saveCompleted(
+                    completed
+                );
+
+            }
+
+
+            updateButton();
+
+        }
+    );
+
+
+    updateButton();
+    async function markLessonComplete(courseId, lessonId) {
+
+    try {
+
+        const response = await fetch("/api/learning-progress", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                course_id: courseId,
+                lesson_id: lessonId
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            console.log("Lesson progress saved");
+
+            // Optional visual update
+            const button =
+                document.getElementById("completeLessonBtn");
+
+            if (button) {
+                button.innerText = "✓ Completed";
+                button.disabled = true;
+            }
+
+        } else {
+
+            alert(data.message || "Unable to save progress");
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Progress save error:",
+            error
+        );
+
+        alert("Unable to save lesson progress.");
+    }
+}
+
+</script>
+
+
+</body>
+
+</html>

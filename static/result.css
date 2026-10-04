@@ -1,0 +1,1943 @@
+/* =========================================================
+   PDF AI ASSISTANT
+   COMPLETE RESULT PAGE CSS
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f7ff 0%,
+            #eef2ff 45%,
+            #f8faff 100%
+        );
+
+    color: #172033;
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+button,
+a {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+::selection {
+    background: #6366f1;
+    color: white;
+}
+
+
+/* =========================================================
+   CUSTOM SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eef2ff;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6366f1;
+}
+
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.side-navigation {
+    position: fixed;
+
+    left: 0;
+    top: 0;
+
+    width: 260px;
+    height: 100vh;
+
+    padding: 24px 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8b5cf6 0%,
+            #8b5cf6 50%,
+            #8b5cf6 100%
+        );
+
+    color: #080707;
+
+    z-index: 1000;
+
+    overflow-y: auto;
+
+    box-shadow:
+        5px 0 30px rgba(15, 23, 42, 0.18);
+
+    transition:
+        width 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+/* =========================================================
+   NAVIGATION TITLE
+========================================================= */
+
+.navigation-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 10px 12px 25px;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
+
+.sidebar-toggle {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.09);
+
+    color: white;
+
+    font-size: 20px;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.sidebar-toggle:hover {
+    background: #8b5cf6;
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   SIDEBAR NAV ITEMS
+========================================================= */
+
+.side-nav-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    width: 100%;
+
+    min-height: 50px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 8px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    color: #dbeafe;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.side-nav-item:hover {
+    color: #ffffff;
+
+    background:
+        rgba(99, 102, 241, 0.22);
+
+    transform: translateX(4px);
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+.side-nav-item:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   NAV ICON
+========================================================= */
+
+.nav-icon {
+    width: 28px;
+
+    min-width: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 19px;
+}
+
+
+/* =========================================================
+   DASHBOARD LINK
+========================================================= */
+
+.dashboard-link {
+    background:
+        rgba(255, 255, 255, 0.04);
+}
+
+
+/* =========================================================
+   UPLOAD LINK
+========================================================= */
+
+.upload-link {
+    margin-top: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.25),
+            rgba(139, 92, 246, 0.18)
+        );
+}
+
+
+/* =========================================================
+   AI STATUS
+========================================================= */
+
+.ai-status {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+
+    bottom: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 12px 14px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    color: #d1fae5;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   STATUS DOT
+========================================================= */
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 4px rgba(34, 197, 94, 0.12),
+        0 0 12px rgba(34, 197, 94, 0.8);
+
+    animation:
+        statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% {
+        box-shadow:
+            0 0 0 3px rgba(34, 197, 94, 0.10),
+            0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 7px rgba(34, 197, 94, 0.04),
+            0 0 15px rgba(34, 197, 94, 0.9);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 3px rgba(34, 197, 94, 0.10),
+            0 0 8px rgba(34, 197, 94, 0.5);
+    }
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+main {
+    margin-left: 260px;
+
+    width: calc(100% - 260px);
+
+    min-height: 100vh;
+
+    padding: 35px 45px 70px;
+
+    transition:
+        margin-left 0.3s ease,
+        width 0.3s ease;
+}
+
+
+/* =========================================================
+   SIDEBAR CLOSED
+========================================================= */
+
+body.sidebar-closed .side-navigation {
+    width: 78px;
+}
+
+body.sidebar-closed main {
+    margin-left: 78px;
+
+    width: calc(100% - 78px);
+}
+
+body.sidebar-closed .navigation-title {
+    justify-content: center;
+}
+
+body.sidebar-closed .navigation-title {
+    font-size: 0;
+}
+
+body.sidebar-closed .side-nav-item {
+    justify-content: center;
+
+    padding: 12px 8px;
+}
+
+body.sidebar-closed .side-nav-item span:not(.nav-icon) {
+    display: none;
+}
+
+body.sidebar-closed .ai-status span:last-child {
+    display: none;
+}
+
+body.sidebar-closed .ai-status {
+    justify-content: center;
+
+    padding: 12px 8px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 28px 30px;
+
+    margin-bottom: 25px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8faff 100%
+        );
+
+    border:
+        1px solid #e5e7eb;
+
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.06);
+
+    animation:
+        fadeUp 0.5s ease;
+}
+
+
+/* =========================================================
+   HEADER ICON
+========================================================= */
+
+.header-icon {
+    width: 70px;
+    height: 70px;
+
+    min-width: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    color: white;
+
+    font-size: 34px;
+
+    box-shadow:
+        0 10px 25px rgba(99, 102, 241, 0.28);
+}
+
+
+/* =========================================================
+   HEADER TITLE
+========================================================= */
+
+.page-header h1 {
+    margin: 0 0 7px;
+
+    color: #111827;
+
+    font-size: 30px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+}
+
+.page-header p {
+    color: #64748b;
+
+    font-size: 15px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.card {
+    width: 100%;
+
+    margin-bottom: 25px;
+
+    padding: 28px;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #e5e7eb;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.055);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.card:hover {
+    box-shadow:
+        0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.section-title {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.section-title > span {
+    width: 46px;
+    height: 46px;
+
+    min-width: 46px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        #eef2ff;
+
+    font-size: 22px;
+}
+
+.section-title h2 {
+    margin: 0 0 5px;
+
+    color: #111827;
+
+    font-size: 21px;
+
+    font-weight: 750;
+}
+
+.section-title p {
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   COMPLETE ACTION CARD
+========================================================= */
+
+.complete-actions-card {
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8faff
+        );
+}
+
+.complete-action-buttons {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   COMPLETE ACTION BUTTON
+========================================================= */
+
+.complete-action-btn {
+    width: 100%;
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.complete-action-btn:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.04);
+}
+
+.complete-action-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   DOWNLOAD ALL
+========================================================= */
+
+.download-all-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5
+        );
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.22);
+}
+
+.download-all-btn:hover {
+    box-shadow:
+        0 12px 25px rgba(37, 99, 235, 0.30);
+}
+
+
+/* =========================================================
+   SHARE ALL
+========================================================= */
+
+.share-all-btn {
+    width: 100%;
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #9333ea
+        );
+
+    box-shadow:
+        0 8px 20px rgba(124, 58, 237, 0.22);
+}
+
+.share-all-btn:hover {
+    box-shadow:
+        0 12px 25px rgba(124, 58, 237, 0.30);
+}
+
+
+/* =========================================================
+   ACTION STATUS
+========================================================= */
+
+.action-status {
+    margin-top: 15px;
+
+    min-height: 20px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   AI FEATURES
+========================================================= */
+
+.features-card {
+    position: relative;
+}
+
+.feature-buttons {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* =========================================================
+   FEATURE BUTTON
+========================================================= */
+
+.feature-button {
+    min-height: 75px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    border-radius: 14px;
+
+    border: 1px solid #e2e8f0;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+.feature-button:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 25px rgba(15, 23, 42, 0.10);
+}
+
+.feature-button:active {
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SMART BUTTON
+========================================================= */
+
+.smart-button:hover {
+    border-color: #8b5cf6;
+
+    background:
+        #faf5ff;
+}
+
+
+/* =========================================================
+   ANALYSIS BUTTON
+========================================================= */
+
+.analysis-button:hover {
+    border-color: #6366f1;
+
+    background:
+        #eef2ff;
+}
+
+
+/* =========================================================
+   CHAPTER BUTTON
+========================================================= */
+
+.chapter-button:hover {
+    border-color: #0ea5e9;
+
+    background:
+        #f0f9ff;
+}
+
+
+/* =========================================================
+   RESULT CARD
+========================================================= */
+
+.result-card {
+    scroll-margin-top: 25px;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+    width: 100%;
+
+    height: 1px;
+
+    margin: 10px 0 22px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #e2e8f0,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   RESULT CONTENT
+========================================================= */
+
+.result-content {
+    width: 100%;
+
+    min-height: 120px;
+}
+
+
+/* =========================================================
+   EMPTY MESSAGE
+========================================================= */
+
+.empty-message {
+    padding: 25px;
+
+    border-radius: 13px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px dashed #cbd5e1;
+
+    color: #64748b;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+.empty-message strong {
+    color: #4f46e5;
+}
+
+
+/* =========================================================
+   GENERATED ANSWER
+========================================================= */
+
+.generated-answer {
+    padding: 22px 24px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8faff,
+            #f5f3ff
+        );
+
+    border:
+        1px solid #e2e8f0;
+
+    color: #1e293b;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+    overflow-wrap: anywhere;
+
+    white-space: normal;
+}
+
+
+/* =========================================================
+   ANSWER TITLE
+========================================================= */
+
+.answer-title {
+    margin-bottom: 12px;
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    background:
+        #eef2ff;
+
+    color: #4338ca;
+
+    font-size: 16px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-answer {
+    padding: 30px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #faf5ff
+        );
+
+    border:
+        1px solid #ddd6fe;
+
+    color: #4f46e5;
+
+    text-align: center;
+
+    line-height: 1.6;
+
+    animation:
+        loadingPulse 1.8s ease-in-out infinite;
+}
+
+.loading-answer strong {
+    font-size: 16px;
+}
+
+.loading-answer small {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+@keyframes loadingPulse {
+    0%,
+    100% {
+        opacity: 0.75;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   ERROR ANSWER
+========================================================= */
+
+.error-answer {
+    padding: 20px;
+
+    border-radius: 13px;
+
+    background:
+        #fef2f2;
+
+    border:
+        1px solid #fecaca;
+
+    color: #b91c1c;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   SMART PDF QUESTION BOX
+========================================================= */
+
+.pdf-question-box {
+    width: 100%;
+
+    margin-bottom: 25px;
+
+    padding: 28px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #faf5ff
+        );
+
+    border:
+        1px solid #e9d5ff;
+
+    box-shadow:
+        0 8px 30px rgba(124, 58, 237, 0.06);
+
+    scroll-margin-top: 25px;
+}
+
+.pdf-question-box h2 {
+    margin-bottom: 7px;
+
+    color: #111827;
+
+    font-size: 21px;
+}
+
+.pdf-question-box > p {
+    margin-bottom: 20px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   QUESTION GRID
+========================================================= */
+
+.question-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   QUESTION BUTTON
+========================================================= */
+
+.question-btn {
+    min-height: 58px;
+
+    padding: 13px 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    border-radius: 12px;
+
+    border:
+        1px solid #e2e8f0;
+
+    background:
+        #ffffff;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    line-height: 1.4;
+
+    transition:
+        all 0.22s ease;
+}
+
+.question-btn:hover {
+    color: #4f46e5;
+
+    border-color: #a5b4fc;
+
+    background:
+        #eef2ff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 18px rgba(99, 102, 241, 0.10);
+}
+
+.question-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   PDF ANSWER
+========================================================= */
+
+.pdf-answer {
+    min-height: 100px;
+
+    padding: 18px;
+
+    margin-top: 5px;
+
+    border-radius: 14px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid #e2e8f0;
+
+    color: #334155;
+
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Q&A HISTORY
+========================================================= */
+
+.qa-history {
+    margin-top: 25px;
+}
+
+.qa-history-title {
+    margin-bottom: 15px;
+
+    padding-bottom: 10px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    color: #312e81;
+
+    font-size: 17px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Q&A HISTORY ITEM
+========================================================= */
+
+.qa-history-item {
+    margin-bottom: 17px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #e2e8f0;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.qa-history-item:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================================
+   Q&A QUESTION
+========================================================= */
+
+.qa-question {
+    padding: 12px 14px;
+
+    margin-bottom: 12px;
+
+    border-radius: 10px;
+
+    background:
+        #eef2ff;
+
+    color: #3730a3;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+.qa-question strong {
+    color: #4338ca;
+}
+
+
+/* =========================================================
+   Q&A ANSWER
+========================================================= */
+
+.qa-answer {
+    padding: 13px 14px;
+
+    border-left:
+        4px solid #8b5cf6;
+
+    border-radius: 0 10px 10px 0;
+
+    background:
+        #fafafa;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    overflow-wrap: anywhere;
+}
+
+.qa-answer strong {
+    color: #6d28d9;
+}
+
+
+/* =========================================================
+   EXTRACTED TEXT
+========================================================= */
+
+#extracted-text {
+    scroll-margin-top: 25px;
+}
+
+#extracted-text h2 {
+    margin-bottom: 10px;
+
+    color: #111827;
+
+    font-size: 21px;
+}
+
+#extracted-text > p {
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+#extracted-text > p strong {
+    color: #334155;
+
+    word-break: break-word;
+}
+
+#extracted-text hr {
+    margin: 20px 0;
+
+    border: none;
+
+    border-top:
+        1px solid #e2e8f0;
+}
+
+
+/* =========================================================
+   EXTRACTED CONTENT
+========================================================= */
+
+.extracted-content {
+    width: 100%;
+
+    max-height: 600px;
+
+    overflow-y: auto;
+    overflow-x: auto;
+
+    padding: 22px;
+
+    border-radius: 13px;
+
+    background:
+        #0f172a;
+
+    color: #e2e8f0;
+
+    border:
+        1px solid #1e293b;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    box-shadow:
+        inset 0 0 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   EXTRACTED CONTENT SCROLLBAR
+========================================================= */
+
+.extracted-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.extracted-content::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.extracted-content::-webkit-scrollbar-thumb {
+    background: #64748b;
+
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   BOTTOM ACTION
+========================================================= */
+
+.bottom-action {
+    display: flex;
+
+    justify-content: center;
+
+    padding: 10px 0 25px;
+}
+
+.bottom-action a {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #cbd5e1;
+
+    color: #4338ca;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition:
+        all 0.25s ease;
+}
+
+.bottom-action a:hover {
+    background:
+        #eef2ff;
+
+    border-color:
+        #a5b4fc;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(99, 102, 241, 0.10);
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================================
+   FOCUS ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible {
+    outline:
+        3px solid rgba(99, 102, 241, 0.35);
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .side-navigation {
+        width: 220px;
+    }
+
+    main {
+        margin-left: 220px;
+
+        width: calc(100% - 220px);
+
+        padding:
+            30px;
+    }
+
+    body.sidebar-closed main {
+        margin-left: 78px;
+
+        width: calc(100% - 78px);
+    }
+
+    .feature-buttons {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .question-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   TABLET SMALL
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .side-navigation {
+        width: 220px;
+
+        transform:
+            translateX(0);
+    }
+
+    main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding:
+            25px 20px 60px;
+    }
+
+    body.sidebar-closed .side-navigation {
+        width: 78px;
+    }
+
+    body.sidebar-closed main {
+        margin-left: 78px;
+
+        width: calc(100% - 78px);
+    }
+
+    .page-header {
+        padding: 22px;
+    }
+
+    .page-header h1 {
+        font-size: 25px;
+    }
+
+    .card,
+    .pdf-question-box {
+        padding: 22px;
+    }
+
+    .complete-action-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    body {
+        background:
+            #f5f7ff;
+    }
+
+    .side-navigation {
+        width: 250px;
+
+        transform:
+            translateX(-100%);
+
+        box-shadow:
+            5px 0 30px rgba(15, 23, 42, 0.25);
+    }
+
+    body:not(.sidebar-closed) .side-navigation {
+        transform:
+            translateX(0);
+    }
+
+    body.sidebar-closed .side-navigation {
+        width: 250px;
+
+        transform:
+            translateX(-100%);
+    }
+
+    main,
+    body.sidebar-closed main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding:
+            15px 12px 45px;
+    }
+
+    .page-header {
+        gap: 13px;
+
+        padding: 18px;
+
+        border-radius: 15px;
+    }
+
+    .header-icon {
+        width: 52px;
+        height: 52px;
+
+        min-width: 52px;
+
+        border-radius: 14px;
+
+        font-size: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 21px;
+    }
+
+    .page-header p {
+        font-size: 12px;
+    }
+
+    .card,
+    .pdf-question-box {
+        padding: 18px;
+
+        border-radius: 15px;
+
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        gap: 10px;
+    }
+
+    .section-title > span {
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+        font-size: 19px;
+    }
+
+    .section-title h2,
+    .pdf-question-box h2,
+    #extracted-text h2 {
+        font-size: 18px;
+    }
+
+    .section-title p {
+        font-size: 12px;
+    }
+
+    .feature-buttons {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .feature-button {
+        min-height: 58px;
+    }
+
+    .question-grid {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .question-btn {
+        min-height: 53px;
+    }
+
+    .complete-action-buttons {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .complete-action-btn {
+        min-height: 54px;
+    }
+
+    .generated-answer {
+        padding: 16px;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+    }
+
+    .loading-answer {
+        padding: 22px 15px;
+    }
+
+    .pdf-answer {
+        padding: 14px;
+    }
+
+    .qa-history-item {
+        padding: 13px;
+    }
+
+    .qa-question,
+    .qa-answer {
+        font-size: 13px;
+    }
+
+    .extracted-content {
+        max-height: 500px;
+
+        padding: 16px;
+
+        font-size: 11px;
+    }
+
+    .bottom-action a {
+        width: 100%;
+
+        text-align: center;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    main,
+    body.sidebar-closed main {
+        padding:
+            10px 8px 35px;
+    }
+
+    .page-header {
+        padding: 15px;
+    }
+
+    .header-icon {
+        width: 46px;
+        height: 46px;
+
+        min-width: 46px;
+
+        font-size: 21px;
+    }
+
+    .page-header h1 {
+        font-size: 18px;
+    }
+
+    .page-header p {
+        font-size: 11px;
+    }
+
+    .card,
+    .pdf-question-box {
+        padding: 15px;
+    }
+
+    .section-title > span {
+        width: 36px;
+        height: 36px;
+
+        min-width: 36px;
+
+        font-size: 17px;
+    }
+
+    .section-title h2,
+    .pdf-question-box h2,
+    #extracted-text h2 {
+        font-size: 17px;
+    }
+
+    .feature-button {
+        font-size: 13px;
+    }
+
+    .complete-action-btn {
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   PRINT STYLES
+========================================================= */
+
+@media print {
+
+    .side-navigation,
+    .complete-actions-card,
+    .features-card,
+    .bottom-action {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+
+        color: black;
+    }
+
+    main,
+    body.sidebar-closed main {
+        width: 100%;
+
+        margin: 0;
+
+        padding: 0;
+    }
+
+    .card,
+    .pdf-question-box {
+        box-shadow: none;
+
+        border:
+            1px solid #ddd;
+
+        break-inside: avoid;
+    }
+
+    .page-header {
+        box-shadow: none;
+
+        border:
+            1px solid #ddd;
+    }
+
+    .extracted-content {
+        max-height: none;
+
+        background: white;
+
+        color: black;
+
+        border:
+            1px solid #ddd;
+    }
+}
+
+
+/* =========================================================
+   DARKER HOVER EFFECTS
+========================================================= */
+
+.analysis-button:disabled:hover,
+.chapter-button:disabled:hover,
+.question-btn:disabled:hover,
+.complete-action-btn:disabled:hover {
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   SMOOTH BUTTON ICON
+========================================================= */
+
+.feature-button:first-letter,
+.complete-action-btn:first-letter,
+.question-btn:first-letter {
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   LONG AI TEXT SUPPORT
+========================================================= */
+
+.generated-answer,
+.qa-answer,
+.qa-question,
+.extracted-content,
+.action-status {
+    overflow-wrap: anywhere;
+
+    word-break: normal;
+}
+
+
+/* =========================================================
+   HEADINGS INSIDE GENERATED CONTENT
+========================================================= */
+
+.generated-answer strong {
+    color: #312e81;
+}
+
+.generated-answer br + br {
+    line-height: 2;
+}
+
+
+/* =========================================================
+   REPORT ELEMENT SUPPORT
+========================================================= */
+
+#complete-pdf-report {
+    background: #ffffff !important;
+
+    color: #111111 !important;
+
+    box-sizing: border-box !important;
+}
+
+#complete-pdf-report h1,
+#complete-pdf-report h2,
+#complete-pdf-report h3 {
+    color: #111111 !important;
+}
+
+#complete-pdf-report p,
+#complete-pdf-report div {
+    color: #222222;
+}
+
+
+/* =========================================================
+   END
+========================================================= */

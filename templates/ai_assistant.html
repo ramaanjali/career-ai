@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Assistant | CareerAI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='ai_assistant.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="assistant-app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        id="assistantSidebar"
+        class="assistant-sidebar"
+    >
+
+        <div class="sidebar-top">
+
+
+            <!-- BRAND -->
+
+            <div class="assistant-brand">
+
+                <div class="brand-icon">
+
+                    <img
+                        src="{{ url_for('static', filename='images/ai-robot.png') }}"
+                        alt="CareerAI"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='✦';"
+                    >
+
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>CareerAI</strong>
+
+                    <span>AI Assistant</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NEW CHAT -->
+
+            <button
+                id="newChatButton"
+                class="new-chat-button"
+                type="button"
+            >
+
+                <span class="new-chat-icon">＋</span>
+
+                <span>New chat</span>
+
+            </button>
+
+
+            <!-- SEARCH -->
+
+            <div class="chat-search">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    id="chatSearch"
+                    type="text"
+                    placeholder="Search chats..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- CHAT LIST -->
+
+            <div
+                id="chatList"
+                class="chat-list"
+            ></div>
+
+
+        </div>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="{{ url_for('tool_dashboard') }}"
+                class="sidebar-link"
+            >
+
+                <span>←</span>
+
+                Back to Tools
+
+            </a>
+
+
+            <div class="ai-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>AI Engine</strong>
+
+                    <small>Online</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="assistant-main">
+
+
+        <!-- HEADER -->
+
+        <header class="assistant-header">
+
+
+            <div class="header-left">
+
+
+                <button
+                    id="mobileMenuButton"
+                    class="mobile-menu"
+                    type="button"
+                >
+                    ☰
+                </button>
+
+
+                <div class="header-title">
+
+                    <h1 id="chatTitle">
+                        AI Assistant
+                    </h1>
+
+                    <span>
+                        CareerAI intelligent assistant
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <button
+                    id="clearChatButton"
+                    class="header-button"
+                    type="button"
+                    title="Clear conversation"
+                >
+                    🗑
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CHAT AREA
+        ================================================== -->
+
+        <section
+            id="messagesContainer"
+            class="messages-container"
+        >
+
+
+            <!-- WELCOME -->
+
+            <div
+                id="welcomeScreen"
+                class="welcome-screen"
+            >
+
+                <div class="welcome-avatar">
+
+                    <img
+                        src="{{ url_for('static', filename='images/ai-robot.png') }}"
+                        alt="AI Robot"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='✦';"
+                    >
+
+                </div>
+
+
+                <h2>
+                    How can I help you today?
+                </h2>
+
+
+                <p>
+                    Ask me anything about careers,
+                    resumes, interviews, coding,
+                    projects, learning or general questions.
+                </p>
+
+
+                <!-- QUICK PROMPTS -->
+
+                <div class="quick-prompts">
+
+
+                    <button
+                        class="quick-prompt"
+                        data-prompt="Review my resume and tell me how I can improve it."
+                    >
+
+                        <span class="prompt-icon">📄</span>
+
+                        <span>
+                            <strong>Improve my resume</strong>
+                            <small>Get resume improvement suggestions</small>
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-prompt"
+                        data-prompt="Create a roadmap for becoming a full stack developer."
+                    >
+
+                        <span class="prompt-icon">🚀</span>
+
+                        <span>
+                            <strong>Career roadmap</strong>
+                            <small>Create a step-by-step career plan</small>
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-prompt"
+                        data-prompt="Give me 10 important JavaScript interview questions with answers."
+                    >
+
+                        <span class="prompt-icon">💻</span>
+
+                        <span>
+                            <strong>Interview preparation</strong>
+                            <small>Practice important interview questions</small>
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-prompt"
+                        data-prompt="Explain machine learning in a simple way with an example."
+                    >
+
+                        <span class="prompt-icon">🧠</span>
+
+                        <span>
+                            <strong>Explain AI</strong>
+                            <small>Learn AI concepts simply</small>
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             COMPOSER
+        ================================================== -->
+
+        <div class="composer-wrapper">
+
+
+            <!-- TYPING -->
+
+            <div
+                id="typingIndicator"
+                class="typing-indicator"
+                hidden
+            >
+
+                <div class="mini-ai-avatar">
+
+                   
+            </div>
+
+
+
+            <!-- FORM -->
+
+            <form
+                id="chatForm"
+                class="chat-composer"
+            >
+
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    placeholder="Message CareerAI..."
+                    autocomplete="off"
+                ></textarea>
+
+
+                <button
+                    id="sendButton"
+                    type="submit"
+                    title="Send message"
+                >
+
+                    <span>➤</span>
+
+                </button>
+
+
+            </form>
+
+
+            <p class="composer-note">
+
+                CareerAI can make mistakes.
+                Verify important information.
+
+            </p>
+
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     MARKDOWN
+====================================================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+></script>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"
+></script>
+
+
+<script
+    src="{{ url_for('static', filename='ai_assistant.js') }}"
+></script>
+
+
+</body>
+
+</html>

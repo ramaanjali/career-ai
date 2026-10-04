@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Learning Hub | CareerAI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='learning_hub.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            ✦
+        </div>
+
+        <div>
+            <h2>CareerAI</h2>
+            <span>Career Assistant</span>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <p>WORKSPACE</p>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_recommendation') }}"
+        >
+            <span>⌂</span>
+            Overview
+        </a>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_recommendation') }}"
+        >
+            <span>📄</span>
+            Resume AI
+        </a>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_recommendation') }}#skills-section"
+        >
+            <span>🧠</span>
+            Skill Gap
+        </a>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_recommendation') }}#jobs-section"
+        >
+            <span>💼</span>
+            Live Jobs
+        </a>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_recommendation') }}#roadmap-section"
+        >
+            <span>🚀</span>
+            Career Roadmap
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <p>TOOLS</p>
+
+        <a
+            class="side-link"
+            href="{{ url_for('resume_builder') }}"
+        >
+            <span>✨</span>
+            Resume Builder
+        </a>
+
+
+        <a
+            class="side-link active"
+            href="{{ url_for('learning_hub') }}"
+        >
+            <span>📚</span>
+            Learning Hub
+        </a>
+
+
+        <a
+            class="side-link"
+            href="{{ url_for('ai_assistant') }}"
+        >
+            <span>🤖</span>
+            AI Assistant
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="ai-status">
+
+            <span class="status-dot"></span>
+
+            <div>
+
+                <strong>AI Engine</strong>
+
+                <small>
+                    Ready to learn
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('tool_dashboard') }}"
+            class="back-btn"
+        >
+            ← Back to Tools
+        </a>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="main-content">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div>
+
+            <span class="breadcrumb">
+                CareerAI / Learning Hub
+            </span>
+
+            <h1>
+                Learning Hub
+            </h1>
+
+            <p>
+                Learn practical skills and build your career.
+            </p>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="learning-hero">
+
+        <div class="hero-content">
+
+            <span class="hero-badge">
+                📚 CAREER LEARNING
+            </span>
+
+            <h2>
+                Learn skills that move your career forward.
+            </h2>
+
+            <p>
+                Explore software, business, creative, finance,
+                healthcare and career-development courses.
+            </p>
+
+        </div>
+
+
+        <div class="hero-icon">
+            🎓
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                id="courseSearch"
+                placeholder="Search courses..."
+            >
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CATEGORIES
+    ====================================================== -->
+
+    <section class="category-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    EXPLORE
+                </span>
+
+                <h2>
+                    Browse by category
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="category-grid"
+            id="categoryGrid"
+        >
+
+            <button
+                class="category-card active"
+                data-category="All"
+            >
+
+                <span>
+                    🌐
+                </span>
+
+                <strong>
+                    All Courses
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Software & IT"
+            >
+
+                <span>
+                    💻
+                </span>
+
+                <strong>
+                    Software & IT
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Business & Management"
+            >
+
+                <span>
+                    📊
+                </span>
+
+                <strong>
+                    Business
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Creative"
+            >
+
+                <span>
+                    🎨
+                </span>
+
+                <strong>
+                    Creative
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Marketing"
+            >
+
+                <span>
+                    📣
+                </span>
+
+                <strong>
+                    Marketing
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Finance & Accounting"
+            >
+
+                <span>
+                    💰
+                </span>
+
+                <strong>
+                    Finance
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Healthcare"
+            >
+
+                <span>
+                    🏥
+                </span>
+
+                <strong>
+                    Healthcare
+                </strong>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="Career Skills"
+            >
+
+                <span>
+                    🚀
+                </span>
+
+                <strong>
+                    Career Skills
+                </strong>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CONTINUE LEARNING
+    ====================================================== -->
+
+    <section
+        class="continue-section"
+        id="continueSection"
+        style="display:none;"
+    >
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    YOUR PROGRESS
+                </span>
+
+                <h2>
+                    Continue Learning
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div id="continueContainer"></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         COURSE LIST
+    ====================================================== -->
+
+    <section class="courses-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="section-label">
+                    COURSES
+                </span>
+
+                <h2 id="courseHeading">
+                    All Courses
+                </h2>
+
+            </div>
+
+
+            <span
+                id="courseCount"
+                class="course-count"
+            >
+                0 courses
+            </span>
+
+        </div>
+
+
+        <div
+            id="courseGrid"
+            class="course-grid"
+        ></div>
+
+
+        <div
+            id="noCourses"
+            class="no-courses"
+            style="display:none;"
+        >
+
+            <div>
+                🔍
+            </div>
+
+            <h3>
+                No courses found
+            </h3>
+
+            <p>
+                Try another search or category.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    src="{{ url_for('static', filename='learning_hub.js') }}"
+></script>
+
+
+</body>
+
+</html>

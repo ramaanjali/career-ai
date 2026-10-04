@@ -1,0 +1,559 @@
+/* =========================================================
+   CAREERAI - LEARNING LESSON PAGE
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.lesson-header {
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 42px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e7ebf2;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+
+/* BACK LINK */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: #667085;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition: 0.2s ease;
+}
+
+.back-link:hover {
+    color: #4169e1;
+    transform: translateX(-2px);
+}
+
+
+/* BRAND */
+
+.brand {
+    font-size: 17px;
+    font-weight: 700;
+
+    color: #1c2942;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.lesson-container {
+    width: min(1050px, calc(100% - 50px));
+
+    margin: 0 auto;
+
+    padding: 35px 0 70px;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.lesson-breadcrumb {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 22px;
+
+    color: #8b95a7;
+
+    font-size: 12px;
+}
+
+.lesson-breadcrumb span {
+    color: #c2c8d3;
+}
+
+
+/* =========================================================
+   LESSON CARD
+========================================================= */
+
+.lesson-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e9f1;
+
+    border-radius: 22px;
+
+    padding: 42px 48px;
+
+    box-shadow:
+        0 12px 40px rgba(24, 39, 75, 0.06);
+}
+
+
+/* =========================================================
+   LESSON LABEL
+========================================================= */
+
+.lesson-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #edf2ff;
+
+    color: #4169e1;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 14px;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.lesson-card h1 {
+    font-size: 34px;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.7px;
+
+    color: #172033;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   LESSON CONTENT
+========================================================= */
+
+.lesson-content {
+    color: #596579;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+.lesson-content > p:first-child {
+    margin-bottom: 25px;
+
+    font-size: 16px;
+
+    color: #4d5b70;
+}
+
+
+/* HEADINGS */
+
+.lesson-content h2 {
+    margin-top: 30px;
+    margin-bottom: 13px;
+
+    color: #24324a;
+
+    font-size: 20px;
+}
+
+.lesson-content h3 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+
+    color: #34435d;
+
+    font-size: 17px;
+}
+
+
+/* PARAGRAPHS */
+
+.lesson-content p {
+    margin-bottom: 16px;
+}
+
+
+/* LISTS */
+
+.lesson-content ul,
+.lesson-content ol {
+    margin: 12px 0 22px 25px;
+}
+
+.lesson-content li {
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   EXAMPLE BOX
+========================================================= */
+
+.example-box {
+    margin: 15px 0 25px;
+
+    padding: 20px 22px;
+
+    border-radius: 14px;
+
+    background: #f7f9ff;
+
+    border: 1px solid #e0e6fb;
+
+    color: #4d5b70;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   CODE
+========================================================= */
+
+.lesson-content pre {
+    margin: 16px 0 28px;
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    background: #172033;
+
+    color: #eaf0ff;
+
+    overflow-x: auto;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.12);
+}
+
+.lesson-content pre code {
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    white-space: pre;
+}
+
+
+/* INLINE CODE */
+
+.lesson-content code {
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+
+/* =========================================================
+   IMPORTANT BOX
+========================================================= */
+
+.important-box {
+    margin-top: 30px;
+
+    padding: 20px 22px;
+
+    border-radius: 14px;
+
+    background: #fff9ed;
+
+    border: 1px solid #f3dfad;
+}
+
+.important-box strong {
+    display: block;
+
+    color: #8b641c;
+
+    font-size: 14px;
+
+    margin-bottom: 7px;
+}
+
+.important-box p {
+    margin: 0;
+
+    color: #75633e;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.lesson-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin-top: 35px;
+
+    padding-top: 28px;
+
+    border-top: 1px solid #edf0f5;
+}
+
+
+/* SECONDARY */
+
+.secondary-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+
+    padding: 0 20px;
+
+    border-radius: 11px;
+
+    border: 1px solid #d8deea;
+
+    background: #ffffff;
+
+    color: #536176;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.secondary-button:hover {
+    background: #f7f9fc;
+
+    border-color: #c5cde0;
+
+    color: #4169e1;
+}
+
+
+/* COMPLETE */
+
+.complete-button {
+    min-height: 46px;
+
+    padding: 0 22px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #4169e1,
+        #6955db
+    );
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(65, 105, 225, 0.20);
+
+    transition: all 0.2s ease;
+}
+
+.complete-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 24px rgba(65, 105, 225, 0.28);
+}
+
+
+/* COMPLETED BUTTON */
+
+.complete-button.completed {
+    background: #e8f8ef;
+
+    color: #168653;
+
+    box-shadow: none;
+
+    cursor: default;
+}
+
+.complete-button.completed:hover {
+    transform: none;
+}
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+.complete-message {
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 13px 16px;
+
+    border-radius: 11px;
+
+    background: #e8f8ef;
+
+    border: 1px solid #ccefdc;
+
+    color: #168653;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.complete-message.show {
+    display: block;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .lesson-header {
+        padding: 0 22px;
+    }
+
+    .lesson-container {
+        width: calc(100% - 30px);
+
+        padding-top: 25px;
+    }
+
+    .lesson-card {
+        padding: 30px 25px;
+
+        border-radius: 17px;
+    }
+
+    .lesson-card h1 {
+        font-size: 28px;
+    }
+
+    .lesson-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .secondary-button,
+    .complete-button {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .lesson-header {
+        height: 62px;
+
+        padding: 0 15px;
+    }
+
+    .brand {
+        font-size: 15px;
+    }
+
+    .back-link {
+        font-size: 12px;
+    }
+
+    .lesson-container {
+        width: calc(100% - 20px);
+    }
+
+    .lesson-card {
+        padding: 25px 18px;
+    }
+
+    .lesson-card h1 {
+        font-size: 24px;
+    }
+
+    .lesson-content {
+        font-size: 14px;
+    }
+
+    .lesson-content pre {
+        padding: 16px;
+
+        font-size: 12px;
+    }
+}

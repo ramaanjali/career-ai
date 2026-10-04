@@ -1,0 +1,3326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF AI Assistant</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fc;
+            color: #1f2937;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 280px;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 18px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 9px;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .new-chat-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .new-chat-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ================= PDF INFO ================= */
+
+        .pdf-info {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .pdf-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            margin-bottom: 5px;
+        }
+
+        .pdf-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            word-break: break-word;
+        }
+
+        /* ================= HISTORY ================= */
+
+        .history-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .history-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .history-container::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .history-title {
+            padding: 8px 9px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .history-group {
+            margin-bottom: 14px;
+        }
+
+        .history-date {
+            padding: 7px 9px;
+            font-size: 11px;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 7px 9px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 3px;
+            transition: .15s;
+            position: relative;
+            width: 100%;
+            min-height: 42px;
+        }
+
+        .chat-item:hover {
+            background: #f3f4f6;
+        }
+
+        .chat-item.active {
+            background: #eaf1ff;
+        }
+
+        .chat-item-main {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .chat-item-title {
+            font-size: 13px;
+            color: #374151;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-item.active .chat-item-title {
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+
+        .chat-delete {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            border-radius: 7px;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 22px;
+            line-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, transform .15s;
+        }
+
+        .chat-delete:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: scale(1.05);
+        }
+
+        .chat-delete:active {
+            transform: scale(.92);
+        }
+
+        .chat-delete:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 30px 10px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .history-loading {
+            text-align: center;
+            padding: 25px 10px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .sidebar-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 12px;
+        }
+
+        .back-btn {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #e5e7eb;
+        }
+
+        /* ================= CHAT AREA ================= */
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            height: 100vh;
+        }
+
+        .chat-header {
+            height: 64px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            flex-shrink: 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .chat-header-info {
+            min-width: 0;
+        }
+
+        .chat-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-header-subtitle {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 3px;
+        }
+
+        /* ================= MESSAGES ================= */
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 8% 30px;
+            scroll-behavior: smooth;
+        }
+
+        .welcome {
+            max-width: 700px;
+            margin: 100px auto 0;
+            text-align: center;
+        }
+
+        .welcome-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 18px;
+            background: #eaf1ff;
+            color: #2563eb;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .welcome h2 {
+            font-size: 26px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .message {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .message.user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .message-inner {
+            max-width: 820px;
+            width: fit-content;
+        }
+
+        .message.user .message-inner {
+            max-width: 75%;
+        }
+
+        .message-label {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 5px;
+        }
+
+        .message.user .message-label {
+            text-align: right;
+        }
+
+        .bubble {
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.65;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .user .bubble {
+            background: #2563eb;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .assistant .bubble {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+            border-bottom-left-radius: 4px;
+        }
+
+        .assistant .bubble img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
+
+        /* ================= EDIT USER MESSAGE ================= */
+
+        .user-message-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .message.user:hover .user-message-actions {
+            opacity: 1;
+        }
+
+        .edit-message-btn {
+            border: 1px solid #dbe3f0;
+            background: #ffffff;
+            color: #4b5563;
+            border-radius: 7px;
+            padding: 5px 9px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .edit-message-btn:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .edit-message-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+
+        /* ================= MESSAGE ACTIONS ================= */
+
+        .message-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .message.user .message-actions {
+            justify-content: flex-end;
+        }
+
+        .message.assistant .message-actions {
+            justify-content: flex-start;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-action-btn {
+            border: 1px solid #dbe3f0;
+            background: #ffffff;
+            color: #4b5563;
+            border-radius: 7px;
+            padding: 5px 9px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .message-action-btn:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
+
+        .message-action-btn.copied {
+            color: #16a34a;
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+        }
+
+        .input-box.editing {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, .10);
+        }
+
+        .edit-mode-note {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto 7px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            color: #2563eb;
+            font-size: 11px;
+        }
+
+        .edit-mode-note.show {
+            display: flex;
+        }
+
+        .cancel-edit-btn {
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 3px 6px;
+        }
+
+        .cancel-edit-btn:hover {
+            color: #dc2626;
+        }
+
+        /* ================= TYPING ================= */
+
+        .typing {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 13px 16px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .typing.show {
+            display: flex;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #9ca3af;
+            animation: typing 1.2s infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                opacity: .3;
+                transform: translateY(0);
+            }
+
+            30% {
+                opacity: 1;
+                transform: translateY(-3px);
+            }
+        }
+
+        /* ================= INPUT ================= */
+
+        .input-area {
+            background: #f7f8fc;
+            padding: 12px 8% 18px;
+        }
+
+        .input-box {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 13px;
+            display: flex;
+            align-items: flex-end;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+        }
+
+        .question-input {
+            flex: 1;
+            resize: none;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 9px 10px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 130px;
+            min-height: 40px;
+            color: #111827;
+        }
+
+        .question-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 16px;
+            transition: .2s;
+        }
+
+        .send-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .send-btn:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .input-note {
+            max-width: 900px;
+            margin: 7px auto 0;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        .overlay {
+            display: none;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: fixed;
+                left: -290px;
+                top: 0;
+                z-index: 1000;
+                transition: .25s;
+                box-shadow: 4px 0 20px rgba(0, 0, 0, .12);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .messages {
+                padding: 22px 15px;
+            }
+
+            .input-area {
+                padding: 10px 12px 14px;
+            }
+
+            .message.user .message-inner {
+                max-width: 88%;
+            }
+
+            .welcome {
+                margin-top: 70px;
+            }
+
+            .welcome h2 {
+                font-size: 21px;
+            }
+
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, .25);
+                z-index: 999;
+            }
+
+            .overlay.show {
+                display: block;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    AI
+                </div>
+
+                <div class="logo-text">
+                    PDF AI Assistant
+                </div>
+
+            </div>
+
+            <button
+                class="new-chat-btn"
+                id="newChatBtn"
+                type="button"
+            >
+                + New Chat
+            </button>
+
+        </div>
+
+
+        <!-- CURRENT PDF -->
+
+        <div class="pdf-info">
+
+            <div class="pdf-label">
+                Current PDF
+            </div>
+
+            <div
+                class="pdf-name"
+                id="pdfName"
+            >
+                {{ filename }}
+            </div>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <div class="history-container">
+
+            <div class="history-title">
+                Chat History
+            </div>
+
+            <div id="historyList">
+
+                <div class="history-loading">
+                    Loading history...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-footer">
+
+            <a
+                href="{{ url_for('history') }}"
+                class="back-btn"
+            >
+                ← PDF History
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <div
+        class="overlay"
+        id="overlay"
+    ></div>
+
+
+    <!-- ================= CHAT ================= -->
+
+    <main class="chat-area">
+
+        <header class="chat-header">
+
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                type="button"
+            >
+                ☰
+            </button>
+
+            <div class="chat-header-info">
+
+                <div
+                    class="chat-header-title"
+                    id="chatTitle"
+                >
+                    {{ current_chat.title if current_chat else "New Chat" }}
+                </div>
+
+                <div class="chat-header-subtitle">
+                    Ask anything about your PDF
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= MESSAGES ================= -->
+
+        <section
+            class="messages"
+            id="messages"
+        ></section>
+
+
+        <!-- ================= INPUT ================= -->
+
+        <div class="input-area">
+
+            <div class="edit-mode-note" id="editModeNote">
+                <span>✏️ Editing your message</span>
+                <button type="button" class="cancel-edit-btn" id="cancelEditBtn">
+                    Cancel
+                </button>
+            </div>
+
+            <form
+                class="input-box"
+                id="chatForm"
+            >
+
+                <textarea
+                    id="questionInput"
+                    class="question-input"
+                    placeholder="Message AI Assistant..."
+                    rows="1"
+                    autocomplete="off"
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="send-btn"
+                    id="sendBtn"
+                    title="Send"
+                >
+                    ➤
+                </button>
+
+            </form>
+
+            <div class="input-note">
+                AI can make mistakes. Check important information.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SERVER DATA
+========================================================= */
+
+const PDF_ID = {{ pdf_id|tojson }};
+const PDF_FILENAME = {{ filename|tojson }};
+
+let currentChatId = {{ chat_id|tojson }};
+let currentChat = {{ (current_chat or {})|tojson }};
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const messagesEl = document.getElementById("messages");
+const historyList = document.getElementById("historyList");
+const questionInput = document.getElementById("questionInput");
+const sendBtn = document.getElementById("sendBtn");
+const chatForm = document.getElementById("chatForm");
+const chatTitle = document.getElementById("chatTitle");
+const newChatBtn = document.getElementById("newChatBtn");
+
+const sidebar = document.getElementById("sidebar");
+const mobileMenu = document.getElementById("mobileMenu");
+const overlay = document.getElementById("overlay");
+const inputBox = document.querySelector(".input-box");
+const editModeNote = document.getElementById("editModeNote");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+/* =========================================================
+   EDIT MESSAGE STATE
+========================================================= */
+
+let editingMessage = null;
+
+
+/* =========================================================
+   NORMALIZE ID
+========================================================= */
+
+function normalizeId(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+        return null;
+    }
+
+    return String(value);
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   CHAT TITLE
+========================================================= */
+
+function getChatTitle(chat) {
+
+    if (
+        chat &&
+        chat.title &&
+        String(chat.title).trim() &&
+        String(chat.title).trim() !== "New Chat"
+    ) {
+
+        return String(chat.title).trim();
+
+    }
+
+
+    if (
+        chat &&
+        Array.isArray(chat.messages) &&
+        chat.messages.length > 0
+    ) {
+
+        const firstMessage = chat.messages[0];
+
+        const firstQuestion =
+            firstMessage.question ||
+            firstMessage.user_message ||
+            firstMessage.query ||
+            "";
+
+        if (String(firstQuestion).trim()) {
+
+            const text = String(firstQuestion).trim();
+
+            return text.length > 50
+                ? text.slice(0, 50) + "..."
+                : text;
+        }
+    }
+
+    return "New Chat";
+}
+
+
+/* =========================================================
+   CLEAR MESSAGES
+========================================================= */
+
+function clearMessages() {
+
+    messagesEl.innerHTML = "";
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToBottom() {
+
+    setTimeout(() => {
+
+        messagesEl.scrollTop =
+            messagesEl.scrollHeight;
+
+    }, 30);
+
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+function showWelcome() {
+
+    messagesEl.innerHTML = `
+
+        <div class="welcome">
+
+            <div class="welcome-icon">
+                ✦
+            </div>
+
+            <h2>
+                How can I help you today?
+            </h2>
+
+            <p>
+                Ask me anything about your PDF.
+                I can help with questions,
+                explanations, summaries,
+                and more.
+            </p>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ADD USER MESSAGE
+========================================================= */
+
+function addUserMessage(text) {
+
+    addMessage(
+        "user",
+        text
+    );
+
+}
+
+
+/* =========================================================
+   ADD AI MESSAGE
+========================================================= */
+
+function addAIMessage(
+    text,
+    imageUrl = null
+) {
+
+    addMessage(
+        "assistant",
+        text,
+        imageUrl
+    );
+
+}
+
+
+/* =========================================================
+   ADD MESSAGE
+========================================================= */
+
+function addMessage(
+    type,
+    text,
+    imageUrl = null
+) {
+
+    removeTyping();
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        `message ${type}`;
+
+    let content = "";
+
+    /* =====================================================
+       IMAGE MESSAGE
+    ===================================================== */
+
+    if (imageUrl) {
+
+        const safeImageUrl =
+            normalizeImageUrl(imageUrl);
+
+        content = `
+
+            <div class="bubble">
+
+                ${escapeHtml(text || "")}
+
+                <div
+                    class="generated-image-container"
+                >
+
+                    <div
+                        class="generated-image-label"
+                    >
+                        AI Generated Image
+                    </div>
+
+                    <img
+                        src="${escapeHtml(safeImageUrl)}"
+                        alt="AI Generated Image"
+                        loading="lazy"
+                        onerror="
+                            this.style.display='none';
+                            this.parentElement.innerHTML +=
+                            '<div style=
+                            &quot;color:#dc2626;
+                            font-size:13px;
+                            margin-top:8px;&quot;>
+                            Unable to load generated image.
+                            </div>';
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+    /* =====================================================
+       NORMAL MESSAGE
+    ===================================================== */
+
+    else {
+
+        content = `
+
+            <div class="bubble">
+
+                ${escapeHtml(text || "")}
+
+            </div>
+
+        `;
+
+    }
+
+    wrapper.innerHTML = `
+
+        <div class="message-inner">
+
+            <div class="message-label">
+
+                ${
+                    type === "user"
+                    ? "You"
+                    : "AI Assistant"
+                }
+
+            </div>
+
+            ${content}
+
+        </div>
+
+    `;
+
+    messagesEl.appendChild(wrapper);
+
+    /* =====================================================
+       COPY + EDIT MESSAGE ACTIONS
+    ===================================================== */
+
+    const inner =
+        wrapper.querySelector(".message-inner");
+
+    const actions =
+        document.createElement("div");
+
+    actions.className = "message-actions";
+
+    /* COPY BUTTON - available for both user and AI messages */
+    const copyButton =
+        document.createElement("button");
+
+    copyButton.type = "button";
+    copyButton.className = "message-action-btn copy-message-btn";
+    copyButton.textContent = "📋 Copy";
+    copyButton.title = "Copy message";
+
+    copyButton.addEventListener(
+        "click",
+        function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            copyMessageText(wrapper, copyButton);
+        }
+    );
+
+    actions.appendChild(copyButton);
+
+    /* EDIT BUTTON - only for user messages */
+    if (type === "user") {
+
+        const editButton =
+            document.createElement("button");
+
+        editButton.type = "button";
+        editButton.className = "message-action-btn edit-message-btn";
+        editButton.textContent = "✏️ Edit";
+        editButton.title = "Edit and resend this question";
+
+        editButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                startEditingMessage(wrapper);
+            }
+        );
+
+        actions.appendChild(editButton);
+    }
+
+    inner.appendChild(actions);
+
+    scrollToBottom();
+}
+
+
+
+
+/* =========================================================
+   COPY MESSAGE
+========================================================= */
+
+async function copyMessageText(wrapper, button) {
+
+    if (!wrapper || !button) {
+        return;
+    }
+
+    const bubble = wrapper.querySelector(".bubble");
+
+    if (!bubble) {
+        return;
+    }
+
+    /* Copy only the actual message text, not generated image UI. */
+    const clone = bubble.cloneNode(true);
+    const generatedImage =
+        clone.querySelector(".generated-image-container");
+
+    if (generatedImage) {
+        generatedImage.remove();
+    }
+
+    const text = clone.innerText.trim();
+
+    if (!text) {
+        return;
+    }
+
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            temp.style.position = "fixed";
+            temp.style.left = "-9999px";
+            temp.style.top = "0";
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            document.execCommand("copy");
+            temp.remove();
+        }
+
+        const oldText = button.textContent;
+        button.textContent = "✓ Copied";
+        button.classList.add("copied");
+
+        setTimeout(function() {
+            button.textContent = oldText;
+            button.classList.remove("copied");
+        }, 1400);
+
+    } catch (error) {
+        console.error("COPY MESSAGE ERROR:", error);
+        alert("Could not copy the message.");
+    }
+}
+
+
+/* =========================================================
+   START EDITING A USER MESSAGE
+========================================================= */
+
+function startEditingMessage(userWrapper) {
+
+    if (!userWrapper) {
+        return;
+    }
+
+    /* Do not allow another edit while request is running */
+    if (
+        sendBtn.disabled ||
+        questionInput.disabled
+    ) {
+        return;
+    }
+
+    const bubble =
+        userWrapper.querySelector(".bubble");
+
+    if (!bubble) {
+        return;
+    }
+
+    const oldQuestion =
+        bubble.textContent.trim();
+
+    if (!oldQuestion) {
+        return;
+    }
+
+    /*
+       The assistant response immediately after this
+       user message belongs to this question.
+    */
+    const assistantWrapper =
+        userWrapper.nextElementSibling &&
+        userWrapper.nextElementSibling.classList.contains("assistant")
+            ? userWrapper.nextElementSibling
+            : null;
+
+    editingMessage = {
+        userWrapper: userWrapper,
+        assistantWrapper: assistantWrapper,
+        oldQuestion: oldQuestion,
+        oldAssistantHTML: assistantWrapper
+            ? assistantWrapper.outerHTML
+            : null
+    };
+
+    questionInput.value = oldQuestion;
+
+    inputBox.classList.add("editing");
+
+    if (editModeNote) {
+        editModeNote.classList.add("show");
+    }
+
+    sendBtn.title = "Send edited question";
+
+    resizeTextarea();
+    questionInput.focus();
+
+    /*
+       Put the edited message near the visible input.
+    */
+    setTimeout(function() {
+        questionInput.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, 50);
+}
+
+
+/* =========================================================
+   CANCEL EDIT
+========================================================= */
+
+function cancelEditMessage() {
+
+    editingMessage = null;
+
+    questionInput.value = "";
+
+    inputBox.classList.remove("editing");
+
+    if (editModeNote) {
+        editModeNote.classList.remove("show");
+    }
+
+    sendBtn.title = "Send";
+
+    resizeTextarea();
+    questionInput.focus();
+}
+
+
+/* =========================================================
+   FINISH EDIT MODE
+========================================================= */
+
+function finishEditMode() {
+
+    editingMessage = null;
+
+    inputBox.classList.remove("editing");
+
+    if (editModeNote) {
+        editModeNote.classList.remove("show");
+    }
+
+    sendBtn.title = "Send";
+}
+
+
+
+/* =========================================================
+   IMAGE URL
+========================================================= */
+
+function normalizeImageUrl(url) {
+
+    if (!url) {
+        return null;
+    }
+
+    url = String(url).trim();
+
+    if (!url) {
+        return null;
+    }
+
+
+    if (
+        url.startsWith("http://") ||
+        url.startsWith("https://") ||
+        url.startsWith("/")
+    ) {
+
+        return url;
+
+    }
+
+
+    if (url.startsWith("static/")) {
+
+        return "/" + url;
+
+    }
+
+
+    return url;
+
+}
+
+
+/* =========================================================
+   RENDER CURRENT CHAT
+========================================================= */
+
+function renderCurrentChat() {
+
+    clearMessages();
+
+
+    if (
+        !currentChat ||
+        !Array.isArray(currentChat.messages) ||
+        currentChat.messages.length === 0
+    ) {
+
+        showWelcome();
+
+        chatTitle.textContent =
+            getChatTitle(currentChat);
+
+        return;
+
+    }
+
+
+    currentChat.messages.forEach(
+        function(message) {
+
+            if (!message) {
+                return;
+            }
+
+
+            /* USER QUESTION */
+
+            const question =
+                message.question ||
+                message.user_message ||
+                message.query ||
+                message.prompt ||
+                null;
+
+
+            if (question) {
+
+                addMessage(
+                    "user",
+                    question
+                );
+
+            }
+
+
+            /* AI ANSWER */
+
+            const answer =
+                message.answer ||
+                message.response ||
+                message.ai_message ||
+                message.assistant_message ||
+                null;
+
+
+            const imageUrl =
+                normalizeImageUrl(
+                    message.image_url ||
+                    message.imageUrl ||
+                    null
+                );
+
+
+            if (answer || imageUrl) {
+
+                addMessage(
+                    "assistant",
+                    answer || "Image generated.",
+                    imageUrl
+                );
+
+            }
+
+        }
+    );
+
+
+    chatTitle.textContent =
+        getChatTitle(currentChat);
+
+}
+
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+function showTyping() {
+
+    removeTyping();
+
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message assistant";
+
+    wrapper.id =
+        "typingMessage";
+
+
+    wrapper.innerHTML = `
+
+        <div class="message-inner">
+
+            <div class="message-label">
+                AI Assistant
+            </div>
+
+            <div class="typing show">
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+                <span class="dot"></span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    messagesEl.appendChild(wrapper);
+
+    scrollToBottom();
+
+}
+
+
+function removeTyping() {
+
+    const typing =
+        document.getElementById(
+            "typingMessage"
+        );
+
+    if (typing) {
+
+        typing.remove();
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY ITEM
+========================================================= */
+
+function createHistoryItem(chat) {
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "chat-item";
+
+
+    const chatId =
+        normalizeId(chat.chat_id);
+
+    const pdfId =
+        normalizeId(chat.pdf_id);
+
+    const currentId =
+        normalizeId(currentChatId);
+
+
+    if (
+        chatId &&
+        currentId &&
+        chatId === currentId
+    ) {
+
+        item.classList.add("active");
+
+    }
+
+
+    const title =
+        getChatTitle(chat);
+
+
+    item.dataset.chatId =
+        chatId || "";
+
+    item.dataset.pdfId =
+        pdfId || "";
+
+
+    item.innerHTML = `
+
+        <div class="chat-item-main">
+
+            <div class="chat-item-title">
+                ${escapeHtml(title)}
+            </div>
+
+        </div>
+
+
+        <button
+            class="chat-delete"
+            type="button"
+            title="Delete chat"
+            aria-label="Delete chat"
+        >
+            ×
+        </button>
+
+    `;
+
+
+    /* =====================================================
+       OPEN CHAT
+    ===================================================== */
+
+    item.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target.closest(
+                    ".chat-delete"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            openChat(chat);
+
+        }
+    );
+
+
+    /* =====================================================
+       DELETE CHAT
+    ===================================================== */
+
+    const deleteBtn =
+        item.querySelector(
+            ".chat-delete"
+        );
+
+
+    deleteBtn.addEventListener(
+        "click",
+        async function(event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            if (deleteBtn.disabled) {
+                return;
+            }
+
+
+            deleteBtn.disabled = true;
+
+
+            try {
+
+                await deleteChat(
+                    chat,
+                    item
+                );
+
+            }
+
+            finally {
+
+                deleteBtn.disabled = false;
+
+            }
+
+        }
+    );
+
+
+    return item;
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY GROUP
+========================================================= */
+
+function renderHistoryGroup(
+    label,
+    chats
+) {
+
+    const group =
+        document.createElement("div");
+
+    group.className =
+        "history-group";
+
+
+    const date =
+        document.createElement("div");
+
+    date.className =
+        "history-date";
+
+    date.textContent =
+        label;
+
+
+    group.appendChild(date);
+
+
+    chats.forEach(
+        function(chat) {
+
+            const item =
+                createHistoryItem(chat);
+
+            group.appendChild(item);
+
+        }
+    );
+
+
+    historyList.appendChild(group);
+
+}
+
+
+/* =========================================================
+   FORMAT HISTORY DATE
+========================================================= */
+
+function formatHistoryTime(value) {
+
+    if (!value) {
+        return "Earlier";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (isNaN(date.getTime())) {
+        return "Earlier";
+    }
+
+
+    const now =
+        new Date();
+
+
+    const today =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+
+    const target =
+        new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+
+
+    const diff =
+        Math.floor(
+            (today - target) /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    if (diff === 0) {
+        return "Today";
+    }
+
+
+    if (diff === 1) {
+        return "Yesterday";
+    }
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD ALL CHAT HISTORY
+   IMPORTANT:
+   Function name is loadChatHistory
+========================================================= */
+
+async function loadChatHistory() {
+
+    historyList.innerHTML = `
+
+        <div class="history-loading">
+            Loading chats...
+        </div>
+
+    `;
+
+
+    try {
+
+        console.log(
+            "Loading /all-chat-history ..."
+        );
+
+
+        const response =
+            await fetch(
+                "/all-chat-history",
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    credentials: "same-origin",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const responseText =
+            await response.text();
+
+
+        console.log(
+            "HISTORY RAW RESPONSE:",
+            responseText
+        );
+
+
+        let data;
+
+
+        try {
+
+            data =
+                responseText
+                    ? JSON.parse(responseText)
+                    : {};
+
+        }
+
+        catch (error) {
+
+            throw new Error(
+                "History API returned invalid JSON."
+            );
+
+        }
+
+
+        console.log(
+            "HISTORY DATA:",
+            data
+        );
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                data.message ||
+                "Could not load chat history."
+            );
+
+        }
+
+
+        historyList.innerHTML = "";
+
+
+        /* =================================================
+           SUPPORT groups
+        ================================================= */
+
+        let allChats = [];
+
+
+        if (
+            data.groups &&
+            typeof data.groups === "object"
+        ) {
+
+            Object.keys(data.groups).forEach(
+                function(label) {
+
+                    const chats =
+                        Array.isArray(
+                            data.groups[label]
+                        )
+                            ? data.groups[label]
+                            : [];
+
+
+                    allChats =
+                        allChats.concat(chats);
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           ALSO SUPPORT direct chats array
+        ================================================= */
+
+        if (
+            Array.isArray(data.chats)
+        ) {
+
+            allChats =
+                allChats.concat(data.chats);
+
+        }
+
+
+        if (
+            Array.isArray(data.history)
+        ) {
+
+            allChats =
+                allChats.concat(data.history);
+
+        }
+
+
+        /* =================================================
+           REMOVE DUPLICATES
+        ================================================= */
+
+        const uniqueChats = [];
+
+        const seenChats =
+            new Set();
+
+
+        allChats.forEach(
+            function(chat) {
+
+                if (!chat) {
+                    return;
+                }
+
+
+                const chatKey =
+                    `${normalizeId(chat.pdf_id) || "general"}:${normalizeId(chat.chat_id) || ""}`;
+
+
+                if (
+                    seenChats.has(chatKey)
+                ) {
+
+                    return;
+
+                }
+
+
+                seenChats.add(chatKey);
+
+                uniqueChats.push(chat);
+
+            }
+        );
+
+
+        /* =================================================
+           SORT NEWEST FIRST
+        ================================================= */
+
+        uniqueChats.sort(
+            function(a, b) {
+
+                const dateA =
+                    new Date(
+                        a.updated_at ||
+                        a.created_at ||
+                        a.asked_at ||
+                        0
+                    ).getTime();
+
+
+                const dateB =
+                    new Date(
+                        b.updated_at ||
+                        b.created_at ||
+                        b.asked_at ||
+                        0
+                    ).getTime();
+
+
+                return dateB - dateA;
+
+            }
+        );
+
+
+        /* =================================================
+           EMPTY
+        ================================================= */
+
+        if (
+            uniqueChats.length === 0
+        ) {
+
+            historyList.innerHTML = `
+
+                <div class="empty-history">
+
+                    <div
+                        class="empty-history-icon"
+                    >
+                        💬
+                    </div>
+
+                    <h4>
+                        No chats yet
+                    </h4>
+
+                    <p>
+                        Your questions will
+                        appear here.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* =================================================
+           GROUP BY DATE
+        ================================================= */
+
+        const groupedChats = {};
+
+
+        uniqueChats.forEach(
+            function(chat) {
+
+                const label =
+                    formatHistoryTime(
+                        chat.updated_at ||
+                        chat.created_at ||
+                        chat.asked_at
+                    );
+
+
+                if (
+                    !groupedChats[label]
+                ) {
+
+                    groupedChats[label] = [];
+
+                }
+
+
+                groupedChats[label].push(
+                    chat
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           RENDER
+        ================================================= */
+
+        Object.keys(groupedChats).forEach(
+            function(label) {
+
+                renderHistoryGroup(
+                    label,
+                    groupedChats[label]
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "HISTORY LOAD ERROR:",
+            error
+        );
+
+
+        historyList.innerHTML = `
+
+            <div class="empty-history">
+
+                <div
+                    class="empty-history-icon"
+                >
+                    ⚠️
+                </div>
+
+                <h4>
+                    History unavailable
+                </h4>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Please refresh the page."
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   OPEN CHAT
+========================================================= */
+
+function openChat(chat) {
+
+    if (!chat) {
+        return;
+    }
+
+
+    const chatId =
+        normalizeId(chat.chat_id);
+
+    const pdfId =
+        normalizeId(chat.pdf_id);
+
+
+    if (!chatId || !pdfId) {
+
+        console.error(
+            "Cannot open chat. Missing IDs:",
+            chat
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "OPEN CHAT:",
+        {
+            pdf_id: pdfId,
+            chat_id: chatId,
+            chat: chat
+        }
+    );
+
+
+    currentChatId =
+        chatId;
+
+    currentChat =
+        chat;
+
+
+    chatTitle.textContent =
+        getChatTitle(chat);
+
+
+    renderCurrentChat();
+
+
+    window.history.pushState(
+        {
+            chat_id: chatId
+        },
+        "",
+        `/qa/${encodeURIComponent(pdfId)}?chat_id=${encodeURIComponent(chatId)}`
+    );
+
+
+    /* Highlight active item */
+
+    document
+        .querySelectorAll(".chat-item")
+        .forEach(
+            function(item) {
+
+                item.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+    const activeItem =
+        document.querySelector(
+            `.chat-item[data-chat-id="${CSS.escape(chatId)}"]`
+        );
+
+
+    if (activeItem) {
+
+        activeItem.classList.add(
+            "active"
+        );
+
+    }
+
+
+    closeMobileSidebar();
+
+}
+
+
+/* =========================================================
+   CREATE NEW CHAT
+========================================================= */
+
+async function createNewChat() {
+
+    currentChatId = null;
+
+    currentChat = null;
+
+
+    chatTitle.textContent =
+        "New Chat";
+
+
+    showWelcome();
+
+
+    cancelEditMessage();
+
+    questionInput.value = "";
+
+
+    resizeTextarea();
+
+
+    window.history.pushState(
+        {},
+        "",
+        `/qa/${encodeURIComponent(PDF_ID)}`
+    );
+
+
+    /* FIXED:
+       loadChatHistory(), NOT loadHistory()
+    */
+
+    await loadChatHistory();
+
+
+    questionInput.focus();
+
+}
+
+
+/* =========================================================
+   DELETE CHAT
+========================================================= */
+
+async function deleteChat(
+    chat,
+    item
+) {
+
+    if (!chat) {
+        return;
+    }
+
+
+    const pdfId =
+        normalizeId(chat.pdf_id);
+
+    const chatId =
+        normalizeId(chat.chat_id);
+
+
+    if (!pdfId || !chatId) {
+
+        alert(
+            "Cannot delete this chat. PDF ID or Chat ID is missing."
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this chat?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const url =
+            `/delete-chat/${encodeURIComponent(pdfId)}/${encodeURIComponent(chatId)}`;
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "DELETE",
+                    credentials: "same-origin",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const responseText =
+            await response.text();
+
+
+        let data = null;
+
+
+        try {
+
+            data =
+                responseText
+                    ? JSON.parse(responseText)
+                    : null;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Invalid delete JSON:",
+                responseText
+            );
+
+            alert(
+                "Delete API did not return JSON."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data ||
+            !data.success
+        ) {
+
+            alert(
+                data && data.error
+                    ? data.error
+                    : "Could not delete chat."
+            );
+
+            return;
+
+        }
+
+
+        if (item) {
+
+            item.remove();
+
+        }
+
+
+        if (
+            normalizeId(currentChatId) === chatId
+        ) {
+
+            currentChatId = null;
+
+            currentChat = null;
+
+            chatTitle.textContent =
+                "New Chat";
+
+            showWelcome();
+
+
+            window.history.replaceState(
+                {},
+                "",
+                `/qa/${encodeURIComponent(pdfId)}`
+            );
+
+        }
+
+
+        /* FIXED */
+
+        await loadChatHistory();
+
+
+        questionInput.focus();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "DELETE CHAT ERROR:",
+            error
+        );
+
+
+        alert(
+            "Delete failed: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND QUESTION
+========================================================= */
+
+async function sendQuestion() {
+
+    const question =
+        questionInput.value.trim();
+
+    if (!question) {
+        return;
+    }
+
+    const isEditing =
+        !!editingMessage;
+
+    /*
+       Save edit state before changing the DOM.
+    */
+    const editState =
+        isEditing
+            ? { ...editingMessage }
+            : null;
+
+    sendBtn.disabled = true;
+    questionInput.disabled = true;
+
+    /*
+       EDIT MODE:
+       Replace the old question immediately and remove
+       its old AI answer from the screen.
+    */
+    if (isEditing) {
+
+        const oldUserWrapper =
+            editState.userWrapper;
+
+        const oldAssistantWrapper =
+            editState.assistantWrapper;
+
+        const oldBubble =
+            oldUserWrapper
+                ? oldUserWrapper.querySelector(".bubble")
+                : null;
+
+        if (oldBubble) {
+            oldBubble.textContent = question;
+        }
+
+        if (oldAssistantWrapper) {
+            oldAssistantWrapper.remove();
+        }
+
+        finishEditMode();
+
+        questionInput.value = "";
+        resizeTextarea();
+
+        showTyping();
+
+    }
+
+    /*
+       NORMAL MODE:
+       Add a new user message.
+    */
+    else {
+
+        addUserMessage(question);
+
+        questionInput.value = "";
+
+        resizeTextarea();
+
+        showTyping();
+    }
+
+    try {
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "question",
+            question
+        );
+
+        formData.append(
+            "pdf_id",
+            String(PDF_ID)
+        );
+
+        formData.append(
+            "chat_id",
+            currentChatId
+                ? String(currentChatId)
+                : ""
+        );
+
+        formData.append(
+            "filename",
+            PDF_FILENAME
+        );
+
+        /*
+           These fields are harmless for the current route
+           and allow the backend to support true persistent
+           editing later.
+        */
+        if (isEditing) {
+
+            formData.append(
+                "edit_mode",
+                "true"
+            );
+
+            formData.append(
+                "edited_question",
+                question
+            );
+        }
+
+        console.log(
+            "SMART ASK REQUEST:",
+            {
+                question: question,
+                pdf_id: PDF_ID,
+                chat_id: currentChatId,
+                filename: PDF_FILENAME,
+                edit_mode: isEditing
+            }
+        );
+
+        const response =
+            await fetch(
+                "/smart-ask",
+                {
+                    method: "POST",
+                    body: formData,
+                    credentials: "same-origin"
+                }
+            );
+
+        const responseText =
+            await response.text();
+
+        console.log(
+            "SMART ASK RAW RESPONSE:",
+            responseText
+        );
+
+        let data;
+
+        try {
+
+            data =
+                responseText
+                    ? JSON.parse(responseText)
+                    : {};
+
+        }
+
+        catch (error) {
+
+            throw new Error(
+                "Server returned invalid JSON. Check Flask /smart-ask route."
+            );
+
+        }
+
+        console.log(
+            "SMART ASK RESPONSE:",
+            data
+        );
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.error ||
+                data.message ||
+                "Smart PDF Q&A failed."
+            );
+
+        }
+
+        removeTyping();
+
+        /* =================================================
+           CHAT ID
+        ================================================= */
+
+        const returnedChatId =
+            data.chat_id ||
+            data.chatId ||
+            data.id ||
+            null;
+
+        if (returnedChatId) {
+
+            currentChatId =
+                normalizeId(
+                    returnedChatId
+                );
+
+        }
+
+        /* =================================================
+           ANSWER
+        ================================================= */
+
+        const answer =
+            data.answer ||
+            data.response ||
+            data.message ||
+            "No answer received.";
+
+        /* =================================================
+           IMAGE
+        ================================================= */
+
+        const imageUrl =
+            normalizeImageUrl(
+                data.image_url ||
+                data.imageUrl ||
+                null
+            );
+
+        addAIMessage(
+            answer,
+            imageUrl
+        );
+
+        /* =================================================
+           LOCAL CHAT
+        ================================================= */
+
+        if (!currentChat) {
+
+            currentChat = {
+
+                chat_id:
+                    currentChatId,
+
+                pdf_id:
+                    PDF_ID,
+
+                filename:
+                    PDF_FILENAME,
+
+                title:
+                    question.length > 50
+                        ? question.slice(0, 50) + "..."
+                        : question,
+
+                messages: []
+
+            };
+
+        }
+
+        if (
+            !Array.isArray(
+                currentChat.messages
+            )
+        ) {
+
+            currentChat.messages = [];
+
+        }
+
+        /*
+           If editing, replace the matching local
+           question/answer pair instead of adding a
+           duplicate pair.
+        */
+        if (isEditing) {
+
+            let replaced = false;
+
+            for (
+                let i = 0;
+                i < currentChat.messages.length;
+                i++
+            ) {
+
+                const message =
+                    currentChat.messages[i];
+
+                const oldQuestion =
+                    message &&
+                    (
+                        message.question ||
+                        message.user_message ||
+                        message.query ||
+                        message.prompt ||
+                        ""
+                    );
+
+                if (
+                    String(oldQuestion).trim() ===
+                    String(editState.oldQuestion).trim()
+                ) {
+
+                    currentChat.messages[i] = {
+
+                        ...message,
+
+                        question:
+                            question,
+
+                        answer:
+                            answer,
+
+                        ...(imageUrl
+                            ? {
+                                type: "image",
+                                image_url:
+                                    imageUrl
+                            }
+                            : {
+                                type:
+                                    undefined
+                            })
+
+                    };
+
+                    replaced = true;
+                    break;
+                }
+            }
+
+            if (!replaced) {
+
+                currentChat.messages.push({
+
+                    question:
+                        question,
+
+                    answer:
+                        answer,
+
+                    ...(imageUrl
+                        ? {
+                            type: "image",
+                            image_url:
+                                imageUrl
+                        }
+                        : {})
+
+                });
+            }
+
+        }
+
+        else {
+
+            currentChat.messages.push({
+
+                question:
+                    question,
+
+                answer:
+                    answer,
+
+                ...(imageUrl
+                    ? {
+                        type: "image",
+                        image_url:
+                            imageUrl
+                    }
+                    : {})
+
+            });
+
+        }
+
+        if (
+            currentChatId
+        ) {
+
+            currentChat.chat_id =
+                currentChatId;
+
+        }
+
+        currentChat.pdf_id =
+            PDF_ID;
+
+        currentChat.filename =
+            PDF_FILENAME;
+
+        /*
+           For an edited first question, update the title too.
+        */
+        if (
+            !currentChat.title ||
+            currentChat.title === "New Chat" ||
+            (
+                isEditing &&
+                String(currentChat.title).trim() ===
+                String(editState.oldQuestion).trim()
+            )
+        ) {
+
+            currentChat.title =
+                question.length > 50
+                    ? question.slice(0, 50) + "..."
+                    : question;
+
+        }
+
+        chatTitle.textContent =
+            getChatTitle(
+                currentChat
+            );
+
+        /* =================================================
+           UPDATE URL
+        ================================================= */
+
+        if (currentChatId) {
+
+            window.history.replaceState(
+                {
+                    chat_id:
+                        currentChatId
+                },
+                "",
+                `/qa/${encodeURIComponent(PDF_ID)}?chat_id=${encodeURIComponent(currentChatId)}`
+            );
+
+        }
+
+        /*
+           IMPORTANT:
+           Do not reload history during edit mode because
+           the current /smart-ask route may save the edited
+           question as a new message until the Flask backend
+           implements edit/update handling.
+        */
+        if (!isEditing) {
+            await loadChatHistory();
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "SMART ASK ERROR:",
+            error
+        );
+
+        removeTyping();
+
+        /*
+           Restore the old question/answer visually if
+           an edited request fails.
+        */
+        if (
+            isEditing &&
+            editState &&
+            editState.userWrapper
+        ) {
+
+            const oldBubble =
+                editState.userWrapper
+                    .querySelector(".bubble");
+
+            if (oldBubble) {
+                oldBubble.textContent =
+                    editState.oldQuestion;
+            }
+
+            if (
+                editState.oldAssistantHTML &&
+                !editState.userWrapper.nextElementSibling
+            ) {
+
+                editState.userWrapper.insertAdjacentHTML(
+                    "afterend",
+                    editState.oldAssistantHTML
+                );
+
+            }
+        }
+
+        addAIMessage(
+            "Error: " +
+            error.message
+        );
+
+    }
+
+    finally {
+
+        sendBtn.disabled = false;
+
+        questionInput.disabled = false;
+
+        questionInput.focus();
+
+        resizeTextarea();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   TEXTAREA RESIZE
+========================================================= */
+
+function resizeTextarea() {
+
+    questionInput.style.height =
+        "auto";
+
+
+    questionInput.style.height =
+        Math.min(
+            questionInput.scrollHeight,
+            130
+        ) + "px";
+
+}
+
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+chatForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        sendQuestion();
+
+    }
+);
+
+
+/* =========================================================
+   ENTER TO SEND
+========================================================= */
+
+questionInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendQuestion();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INPUT RESIZE
+========================================================= */
+
+questionInput.addEventListener(
+    "input",
+    resizeTextarea
+);
+
+
+/* =========================================================
+   CANCEL EDIT BUTTON
+========================================================= */
+
+if (cancelEditBtn) {
+
+    cancelEditBtn.addEventListener(
+        "click",
+        function() {
+            cancelEditMessage();
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
+
+newChatBtn.addEventListener(
+    "click",
+    async function() {
+
+        await createNewChat();
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+mobileMenu.addEventListener(
+    "click",
+    function() {
+
+        sidebar.classList.add(
+            "open"
+        );
+
+        overlay.classList.add(
+            "show"
+        );
+
+    }
+);
+
+
+overlay.addEventListener(
+    "click",
+    closeMobileSidebar
+);
+
+
+function closeMobileSidebar() {
+
+    sidebar.classList.remove(
+        "open"
+    );
+
+    overlay.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   BROWSER BACK / FORWARD
+========================================================= */
+
+window.addEventListener(
+    "popstate",
+    function() {
+
+        window.location.reload();
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "PDF ID:",
+            PDF_ID
+        );
+
+        console.log(
+            "PDF FILE:",
+            PDF_FILENAME
+        );
+
+        console.log(
+            "CURRENT CHAT ID:",
+            currentChatId
+        );
+
+        console.log(
+            "CURRENT CHAT:",
+            currentChat
+        );
+
+        console.log(
+            "================================"
+        );
+
+
+        /* =================================================
+           RENDER CURRENT CHAT
+        ================================================= */
+
+        if (
+            currentChat &&
+            Array.isArray(
+                currentChat.messages
+            ) &&
+            currentChat.messages.length > 0
+        ) {
+
+            renderCurrentChat();
+
+        }
+
+        else {
+
+            showWelcome();
+
+        }
+
+
+        /* =================================================
+           LOAD HISTORY
+
+           IMPORTANT:
+           DO NOT USE loadHistory()
+        ================================================= */
+
+        await loadChatHistory();
+
+
+        /* =================================================
+           FOCUS
+        ================================================= */
+
+        questionInput.focus();
+
+
+        /* =================================================
+           RESIZE
+        ================================================= */
+
+        resizeTextarea();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Document & Career Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='tool_dashboard.css') }}">
+</head>
+
+<body>
+
+    <!-- Background effects -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+
+    <!-- NAVBAR -->
+    <header class="top-navbar">
+
+        <div class="brand">
+            <div class="brand-icon">🤖</div>
+
+            <div>
+                <h2>AI Assistant</h2>
+                <span>Document & Career</span>
+            </div>
+        </div>
+
+
+        <div class="nav-right">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+    <main class="tool-container">
+
+        <section class="welcome-section">
+
+            <span class="welcome-badge">
+                ✨ AI POWERED PLATFORM
+            </span>
+
+            <h1>
+                Welcome to
+                <span>AI Document & Career Assistant</span>
+            </h1>
+
+            <p>
+                What would you like to work on today?
+                Choose a tool below to get started.
+            </p>
+
+        </section>
+
+
+
+        <!-- TOOL CARDS -->
+        <section class="tools-grid">
+
+
+            <!-- PDF SUMMARIZER -->
+            <div class="tool-card pdf-card">
+
+                <div class="tool-icon">
+                    📄
+                </div>
+
+                <div class="tool-content">
+
+                    <h2>
+                        PDF Summarizer
+                    </h2>
+
+                    <p>
+                        Upload your PDF documents, generate
+                        summaries and chat with your documents
+                        using AI.
+                    </p>
+
+                    <ul>
+
+                        <li>✓ AI PDF Summarization</li>
+
+                        <li>✓ Ask Questions from PDF</li>
+
+                        <li>✓ Document Chat</li>
+
+                        <li>✓ PDF History</li>
+
+                    </ul>
+
+                    <a href="{{ url_for('pdf_summarizer') }}"
+                       class="tool-btn">
+
+                        Open PDF Summarizer
+
+                        <span>→</span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RESUME AI -->
+            <div class="tool-card resume-card">
+
+                <div class="tool-icon">
+                    🎯
+                </div>
+
+                <div class="tool-content">
+
+                    <h2>
+                        Resume AI Recommendation
+                    </h2>
+
+                    <p>
+                        Analyze your resume, identify missing
+                        skills and get AI-powered career
+                        recommendations.
+                    </p>
+
+                    <ul>
+
+                        <li>✓ Resume Analysis</li>
+
+                        <li>✓ Skill Gap Analysis</li>
+
+                        <li>✓ Job Role Recommendations</li>
+
+                        <li>✓ Resume Improvement Suggestions</li>
+
+                    </ul>
+
+                    <a href="{{ url_for('resume_recommendation') }}"
+                       class="tool-btn">
+
+                        Open Resume AI
+
+                        <span>→</span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- BOTTOM INFO -->
+        <section class="bottom-info">
+
+            <div>
+                <span>🔐</span>
+                Secure
+            </div>
+
+            <div>
+                <span>⚡</span>
+                AI Powered
+            </div>
+
+            <div>
+                <span>🚀</span>
+                Career Focused
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <footer>
+
+        <p>
+            © 2026 AI Document & Career Assistant
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

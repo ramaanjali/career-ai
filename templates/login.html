@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | AI Document & Career Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='auth.css') }}">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+
+    <!-- LEFT ANIMATED VISUAL -->
+
+    <div class="auth-visual">
+
+        <a href="{{ url_for('home') }}" class="back-home">
+            ← Back to Home
+        </a>
+
+        <div class="visual-content">
+
+            <div class="visual-badge">
+                <span></span>
+                AI-Powered Platform
+            </div>
+
+            <h1>
+                Your Documents.
+                <br>
+                <span>Your Career.</span>
+                <br>
+                One Intelligent Platform.
+            </h1>
+
+            <p>
+                Understand documents, improve your resume,
+                discover skills and build your career with AI.
+            </p>
+
+
+            <!-- Animated Illustration -->
+
+            <div class="auth-animation">
+
+                <div class="animation-glow"></div>
+
+                <div class="ring ring-one"></div>
+                <div class="ring ring-two"></div>
+
+
+                <div class="floating-document">
+
+                    <div class="doc-top">
+                        <div class="doc-logo">AI</div>
+
+                        <div>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class="doc-line big"></div>
+                    <div class="doc-line"></div>
+                    <div class="doc-line"></div>
+                    <div class="doc-line small"></div>
+
+                    <div class="doc-chart">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </div>
+
+                    <div class="scan-line"></div>
+
+                </div>
+
+
+                <div class="mini-floating resume-mini">
+                    📋
+                    <div>
+                        <strong>Resume</strong>
+                        <small>Analyzed</small>
+                    </div>
+                    <b>✓</b>
+                </div>
+
+
+                <div class="mini-floating ai-mini">
+                    ✦
+                    <div>
+                        <strong>AI Assistant</strong>
+                        <small>Ready to help</small>
+                    </div>
+                </div>
+
+
+                <div class="mini-floating career-mini">
+                    🎯
+                    <div>
+                        <strong>Career Match</strong>
+                        <small>92% match</small>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="visual-features">
+
+                <div>
+                    <span>✓</span>
+                    Smart PDF Analysis
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    AI Resume Assistance
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Career Recommendations
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RIGHT LOGIN -->
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+
+            <div class="mobile-brand">
+
+                <div class="brand-logo">
+                    ✦
+                </div>
+
+                <strong>
+                    AI Document & Career Assistant
+                </strong>
+
+            </div>
+
+
+            <div class="auth-header">
+
+                <div class="auth-icon">
+                    🔐
+                </div>
+
+                <h2>
+                    Welcome Back
+                </h2>
+
+                <p>
+                    Sign in to continue your AI journey
+                </p>
+
+            </div>
+
+
+            <!-- FLASH MESSAGE -->
+
+            {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                    <div class="flash-message">
+
+                        {% for message in messages %}
+                            <span>{{ message }}</span>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form action="{{ url_for('login') }}"
+                  method="POST"
+                  class="auth-form">
+
+
+                <div class="input-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <div class="password-label">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <a href="#">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('password', this)">
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <label class="remember">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                    >
+
+                    <span>
+                        Remember me
+                    </span>
+
+                </label>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit">
+
+                    Sign In
+
+                    <span>→</span>
+
+                </button>
+
+            </form>
+
+
+            <div class="divider">
+
+                <span></span>
+
+                <p>OR</p>
+
+                <span></span>
+
+            </div>
+            <a href="{{ url_for('forgot_password') }}">
+    Forgot password?
+</a>
+
+
+            <!-- GOOGLE -->
+
+            <a
+    href="{{ url_for('google_login') }}"
+    class="google-btn"
+    style="text-decoration: none;">
+
+    <span class="google-icon">
+        G
+    </span>
+
+    <span>
+        Continue with Google
+    </span>
+
+</a>
+
+
+            <div class="auth-switch">
+
+                Don't have an account?
+
+                <a href="{{ url_for('signup') }}">
+                    Create an account
+                </a>
+
+            </div>
+
+
+            <div class="secure-note">
+
+                <span>🔒</span>
+
+                Your information is securely protected.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function togglePassword(inputId, button) {
+
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+    } else {
+
+        input.type = "password";
+
+        button.textContent = "👁";
+
+    }
+
+}
+
+
+function googleLogin() {
+    window.location.href = "/google-login";
+}
+
+</script>
+
+</body>
+</html>

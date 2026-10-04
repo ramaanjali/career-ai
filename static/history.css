@@ -1,0 +1,734 @@
+/* =========================================================
+   PDF HISTORY PAGE
+========================================================= */
+
+.history-container {
+
+    width: 90%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.history-title {
+
+    font-size: 32px;
+    font-weight: 700;
+
+    color: #1e293b;
+
+    margin-bottom: 10px;
+}
+
+
+.history-subtitle {
+
+    color: #64748b;
+
+    font-size: 16px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   HISTORY CARD
+========================================================= */
+
+.history-card {
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+
+    transition: 0.25s ease;
+}
+
+
+.history-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* =========================================================
+   PDF INFORMATION
+========================================================= */
+
+.pdf-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.pdf-name {
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    color: #1e293b;
+
+    margin-bottom: 12px;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   PDF DETAILS
+========================================================= */
+
+.pdf-details {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+.pdf-details span {
+
+    background: #f8fafc;
+
+    padding: 7px 10px;
+
+    border-radius: 7px;
+}
+
+
+.pdf-details strong {
+
+    color: #334155;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.pdf-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.view-btn,
+.delete-btn {
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.view-btn {
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+}
+
+
+.view-btn:hover {
+
+    background: #4f46e5;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.delete-btn {
+
+    background: #fee2e2;
+
+    color: #dc2626;
+}
+
+
+.delete-btn:hover {
+
+    background: #dc2626;
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* Remove default form spacing */
+
+.pdf-actions form {
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   EMPTY HISTORY
+========================================================= */
+
+.empty-history {
+
+    text-align: center;
+
+    padding: 70px 20px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+
+    color: #64748b;
+}
+
+
+.empty-icon {
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+}
+
+
+.empty-history h2 {
+
+    color: #1e293b;
+
+    margin-bottom: 10px;
+}
+
+
+.empty-history p {
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   UPLOAD BUTTON
+========================================================= */
+
+.upload-btn {
+
+    display: inline-block;
+
+    padding: 11px 20px;
+
+    background: #4f46e5;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+
+.upload-btn:hover {
+
+    background: #3730a3;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .history-container {
+
+        width: 94%;
+
+        margin: 25px auto;
+    }
+
+
+    .history-title {
+
+        font-size: 27px;
+    }
+
+
+    .history-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .pdf-details {
+
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .pdf-actions {
+
+        width: 100%;
+
+        margin-left: 0;
+    }
+
+
+    .view-btn,
+    .delete-btn {
+
+        flex: 1;
+
+        width: 100%;
+    }
+
+}
+/* =========================================================
+   Q&A HISTORY PAGE - ADDITIONAL STYLES
+   Existing history.css code is NOT changed.
+========================================================= */
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7ff;
+    color: #172033;
+}
+
+/* Main container */
+.history-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 36px auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.history-header {
+    background: #ffffff;
+    border: 1px solid #e6e9f5;
+    border-radius: 22px;
+    padding: 26px 30px;
+    margin-bottom: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    box-shadow: 0 10px 30px rgba(48, 55, 120, 0.08);
+}
+
+.history-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: #172033;
+}
+
+.history-header p {
+    margin: 8px 0 0;
+    color: #70798f;
+    font-size: 15px;
+}
+
+/* Dashboard button */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 19px;
+
+    border-radius: 12px;
+    text-decoration: none;
+
+    color: #ffffff;
+    font-weight: 700;
+
+    background: linear-gradient(135deg, #5541e8, #7a38ed);
+
+    box-shadow: 0 8px 18px rgba(93, 61, 232, 0.22);
+
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   Q&A SECTION
+========================================================= */
+
+.qa-history {
+    width: 100%;
+}
+
+/* Conversation History heading */
+
+.history-heading {
+    background: #ffffff;
+
+    border: 1px solid #e6e9f5;
+    border-radius: 16px;
+
+    padding: 18px 22px;
+    margin-bottom: 18px;
+
+    color: #5140df;
+
+    font-size: 21px;
+    font-weight: 800;
+
+    box-shadow: 0 7px 22px rgba(48, 55, 120, 0.06);
+}
+
+/* =========================================================
+   CHAT CARD
+========================================================= */
+
+.history-item {
+    background: #ffffff;
+
+    border: 1px solid #e4e7f1;
+    border-radius: 20px;
+
+    padding: 24px;
+    margin-bottom: 22px;
+
+    box-shadow: 0 8px 25px rgba(48, 55, 120, 0.07);
+
+    transition: 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(48, 55, 120, 0.10);
+}
+
+/* Chat title */
+
+.chat-title {
+    color: #20263a;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+/* PDF name */
+
+.chat-pdf {
+    display: inline-block;
+
+    padding: 8px 12px;
+    margin-bottom: 18px;
+
+    border-radius: 10px;
+
+    background: #f0edff;
+    color: #5b43df;
+
+    font-size: 14px;
+    font-weight: 650;
+}
+
+/* =========================================================
+   USER QUESTION
+========================================================= */
+
+.history-question {
+    margin-top: 14px;
+
+    padding: 16px 18px;
+
+    border-radius: 15px;
+
+    background: #f5f7ff;
+
+    border-left: 4px solid #6550e8;
+}
+
+.history-question > span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #5140df;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   AI ANSWER
+========================================================= */
+
+.history-answer {
+    margin-top: 14px;
+
+    padding: 16px 18px;
+
+    border-radius: 15px;
+
+    background: #f8f4ff;
+
+    border-left: 4px solid #9a65ed;
+}
+
+.history-answer > span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #6a42d8;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   MESSAGE TEXT
+========================================================= */
+
+.message-text {
+    color: #384156;
+
+    font-size: 15px;
+    line-height: 1.75;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   TIME
+========================================================= */
+
+.message-time {
+    margin-top: 12px;
+
+    color: #8a91a3;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   NO QUESTIONS
+========================================================= */
+
+.no-history {
+    margin-top: 14px;
+
+    padding: 17px;
+
+    border-radius: 14px;
+
+    background: #f7f8fc;
+
+    color: #7b8395;
+
+    text-align: center;
+
+    border: 1px solid #eceef5;
+}
+
+/* =========================================================
+   EMPTY HISTORY
+========================================================= */
+
+.empty-history {
+    max-width: 650px;
+
+    margin: 55px auto;
+
+    padding: 55px 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e9f5;
+    border-radius: 24px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(48, 55, 120, 0.08);
+}
+
+/* Empty icon */
+
+.empty-icon {
+    width: 74px;
+    height: 74px;
+
+    margin: 0 auto 18px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 20px;
+
+    background: #f0edff;
+
+    font-size: 35px;
+}
+
+.empty-history h2 {
+    margin: 0 0 10px;
+
+    color: #20263a;
+
+    font-size: 24px;
+}
+
+.empty-history p {
+    margin: 0 0 24px;
+
+    color: #737b8f;
+
+    line-height: 1.6;
+}
+
+/* Upload button */
+
+.upload-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    background: linear-gradient(135deg, #5541e8, #7a38ed);
+
+    box-shadow: 0 8px 18px rgba(93, 61, 232, 0.22);
+
+    transition: 0.2s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .history-container {
+        width: 94%;
+        margin: 22px auto;
+    }
+
+    .history-header {
+        padding: 22px;
+
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .history-header h1 {
+        font-size: 27px;
+    }
+
+    .back-button {
+        width: 100%;
+    }
+
+    .history-item {
+        padding: 18px;
+    }
+}

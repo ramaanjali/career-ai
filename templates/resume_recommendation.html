@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Resume AI | CareerAI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='resume.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            ✦
+        </div>
+
+        <div>
+            <h2>CareerAI</h2>
+            <span>Career Assistant</span>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <p>WORKSPACE</p>
+
+        <a class="side-link active" href="#">
+            <span>⌂</span>
+            Overview
+        </a>
+
+        <a class="side-link" href="#upload-section">
+            <span>📄</span>
+            Resume AI
+        </a>
+
+        <a class="side-link" href="#skills-section">
+            <span>🧠</span>
+            Skill Gap
+        </a>
+
+        <a class="side-link" href="#jobs-section">
+            <span>💼</span>
+            Live Jobs
+        </a>
+
+        <a class="side-link" href="#roadmap-section">
+            <span>🚀</span>
+            Career Roadmap
+        </a>
+
+    </div>
+
+
+    <div class="sidebar-section">
+
+        <p>TOOLS</p>
+
+        <a class="side-link" href="{{ url_for('resume_builder') }}">
+            <span>✨</span>
+            Resume Builder
+        </a>
+
+        
+
+        <a class="side-link" href="{{ url_for('learning_hub') }}">
+            <span>📚</span>
+            Learning Hub
+        </a>
+
+        <a
+    href="{{ url_for('ai_assistant') }}"
+    class="side-link"
+>
+    <span>🤖</span>
+    AI Assistant
+</a>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="ai-status">
+
+            <span class="status-dot"></span>
+
+            <div>
+                <strong>AI Engine</strong>
+                <small>Ready to analyze</small>
+            </div>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('tool_dashboard') }}"
+            class="back-btn"
+        >
+            ← Back to Tools
+        </a>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div>
+
+            <span class="breadcrumb">
+                CareerAI / Resume AI
+            </span>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button class="icon-btn">
+                🔔
+            </button>
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Career Profile</strong>
+                    <small>AI Assistant</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================================
+         HERO
+    ================================================== -->
+
+    <section class="dashboard-hero">
+
+        <div class="hero-left">
+
+            <div class="ai-badge">
+
+                <span></span>
+
+                AI CAREER ENGINE
+
+            </div>
+
+
+            <h1>
+                Build Your
+                <span>Career Intelligence.</span>
+            </h1>
+
+
+            <p>
+                Upload your resume and let AI understand
+                your skills, discover suitable roles,
+                identify skill gaps and build your
+                personalized career roadmap.
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    href="#upload-section"
+                    class="primary-btn"
+                >
+                    Analyze Resume
+                    <span>→</span>
+                </a>
+
+
+                <button class="secondary-btn">
+                    ▶ See How It Works
+                </button>
+
+            </div>
+
+
+            <div class="hero-mini-stats">
+
+                <div>
+                    <strong>AI</strong>
+                    <span>Resume Analysis</span>
+                </div>
+
+                <div>
+                    <strong>LIVE</strong>
+                    <span>Job Matching</span>
+                </div>
+
+                <div>
+                    <strong>24/7</strong>
+                    <span>Career Assistant</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- AI VISUAL -->
+
+        <div class="ai-visual">
+
+            <div class="ai-glow"></div>
+
+            <div class="ai-ring ring-one"></div>
+
+            <div class="ai-ring ring-two"></div>
+
+
+            <div class="ai-brain">
+
+                <div class="brain-core">
+                    AI
+                </div>
+
+            </div>
+
+
+            <div class="floating-ui resume-ui">
+
+                <span>📄</span>
+
+                <div>
+                    <strong>Resume</strong>
+                    <small>Ready</small>
+                </div>
+
+            </div>
+
+
+            <div class="floating-ui skill-ui">
+
+                <span>🧠</span>
+
+                <div>
+                    <strong>Skills</strong>
+                    <small>Analyzing</small>
+                </div>
+
+            </div>
+
+
+           
+
+
+            <div class="orbit-dot dot-one"></div>
+            <div class="orbit-dot dot-two"></div>
+            <div class="orbit-dot dot-three"></div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         QUICK ANALYTICS
+    ================================================== -->
+
+    <section class="analytics">
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon blue">
+                📊
+            </div>
+
+            <div>
+                <span>Resume Score</span>
+                <strong id="resumeScore">--</strong>
+            </div>
+
+            <small>
+                AI powered
+            </small>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon purple">
+                🧠
+            </div>
+
+            <div>
+                <span>Skills Found</span>
+                <strong id="skillsCount">--</strong>
+            </div>
+
+            <small>
+                From resume
+            </small>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon green">
+                🎯
+            </div>
+
+            <div>
+                <span>Career Matches</span>
+                <strong id="careerMatches">--</strong>
+            </div>
+
+            <small>
+                AI recommended
+            </small>
+
+        </div>
+
+
+        <div class="analytics-card">
+
+            <div class="analytics-icon orange">
+                💼
+            </div>
+
+            <div>
+                <span>Job Matches</span>
+                <strong id="jobMatches">--</strong>
+            </div>
+
+            <small>
+                Live search
+            </small>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         UPLOAD
+    ================================================== -->
+
+    <section
+        class="upload-area"
+        id="upload-section"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <span>STEP 01</span>
+
+                <h2>
+                    Analyze Your Resume
+                </h2>
+
+                <p>
+                    Give our AI your resume and we'll
+                    turn it into actionable career insights.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="upload-grid">
+
+
+            <!-- UPLOAD -->
+
+            <div class="upload-card">
+
+                <div class="upload-card-top">
+
+                    <div class="upload-big-icon">
+                        📄
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Drop your resume here
+                        </h3>
+
+                        <p>
+                            PDF format • Maximum 10 MB
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="resumeUploadForm"
+                    method="POST"
+                    enctype="multipart/form-data"
+                >
+
+                    <input
+                        type="file"
+                        id="resumeFile"
+                        name="resume_file"
+                        accept=".pdf"
+                        hidden
+                    >
+
+
+                    <label
+                        for="resumeFile"
+                        class="drop-zone"
+                    >
+
+                        <div class="drop-icon">
+                            ↑
+                        </div>
+
+                        <strong>
+                            Choose your resume
+                        </strong>
+
+                        <span>
+                            or drag & drop PDF here
+                        </span>
+
+                        <small id="selectedFile">
+                            No file selected
+                        </small>
+
+                    </label>
+
+
+                    <button
+                        type="submit"
+                        class="analyze-resume-btn"
+                        id="analyzeBtn"
+                    >
+                        Start AI Analysis
+                        <span>→</span>
+                    </button>
+
+                </form>
+
+
+                <div class="secure-note">
+                    🔒 Your document is processed securely
+                </div>
+
+            </div>
+
+
+
+            <!-- WHAT AI DOES -->
+
+            <div class="ai-process-card">
+
+                <div class="process-header">
+
+                    <span class="process-icon">
+                        ✨
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            What AI will discover
+                        </h3>
+
+                        <p>
+                            Your complete career profile
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-list">
+
+                    <div class="process-item">
+                        <span>01</span>
+                        <div>
+                            <strong>Resume Intelligence</strong>
+                            <small>
+                                Education, experience and projects
+                            </small>
+                        </div>
+                    </div>
+
+
+                    <div class="process-item">
+                        <span>02</span>
+                        <div>
+                            <strong>Skill Intelligence</strong>
+                            <small>
+                                Technical and professional skills
+                            </small>
+                        </div>
+                    </div>
+
+
+                    <div class="process-item">
+                        <span>03</span>
+                        <div>
+                            <strong>Career Intelligence</strong>
+                            <small>
+                                Suitable roles for your profile
+                            </small>
+                        </div>
+                    </div>
+
+
+                    <div class="process-item">
+                        <span>04</span>
+                        <div>
+                            <strong>Job Intelligence</strong>
+                            <small>
+                                Relevant current opportunities
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ANALYSIS
+    ================================================== -->
+
+    <section
+        class="analysis-panel"
+        id="analysisPanel"
+    >
+
+        <div class="scanning-visual">
+
+            <div class="scan-ring"></div>
+
+            <div class="scan-core">
+                AI
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <span class="ai-badge">
+                AI ANALYSIS
+            </span>
+
+            <h2>
+                Understanding your career profile...
+            </h2>
+
+            <p>
+                Our AI is extracting your skills,
+                experience and career opportunities.
+            </p>
+
+
+            <div class="analysis-steps">
+
+                <div class="analysis-step active">
+                    <span>✓</span>
+                    Reading resume
+                </div>
+
+                <div class="analysis-step">
+                    <span>○</span>
+                    Extracting skills
+                </div>
+
+                <div class="analysis-step">
+                    <span>○</span>
+                    Finding suitable roles
+                </div>
+
+                <div class="analysis-step">
+                    <span>○</span>
+                    Matching job market
+                </div>
+
+            </div>
+
+
+            <div class="progress">
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                ></div>
+            </div>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SKILL INTELLIGENCE
+    ================================================== -->
+
+    <section
+        class="intelligence-section"
+        id="skills-section"
+    >
+
+        <div class="section-title center">
+
+            <span>STEP 02</span>
+
+            <h2>
+                Your Skill Intelligence
+            </h2>
+
+            <p>
+                AI will compare your current skills
+                with the skills required by the market.
+            </p>
+
+        </div>
+
+
+        <div class="intelligence-grid">
+
+            <div class="intelligence-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span>DETECTED</span>
+                        <h3>Current Skills</h3>
+                    </div>
+
+                    <span>🧠</span>
+
+                </div>
+
+
+                <div
+                    id="detectedSkills"
+                    class="skill-list"
+                >
+
+                    <div class="empty-message">
+                        Upload your resume to detect skills.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="intelligence-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span>SKILL GAP</span>
+                        <h3>Skills To Learn</h3>
+                    </div>
+
+                    <span>📚</span>
+
+                </div>
+
+
+                <div
+                    id="skillGap"
+                    class="skill-list"
+                >
+
+                    <div class="empty-message">
+                        AI will identify your missing skills.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         CAREER ROLES
+    ================================================== -->
+
+    <section class="career-section">
+
+        <div class="section-title center">
+
+            <span>STEP 03</span>
+
+            <h2>
+                Suitable Career Roles
+            </h2>
+
+            <p>
+                AI will identify roles based on your
+                actual skills, projects and experience.
+            </p>
+
+        </div>
+
+
+        <div
+            id="careerRoles"
+            class="career-role-grid"
+        >
+
+            <div class="empty-large">
+
+                <div>
+                    🎯
+                </div>
+
+                <h3>
+                    Your career matches will appear here
+                </h3>
+
+                <p>
+                    Upload your resume to generate
+                    personalized career recommendations.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         LIVE JOBS
+    ================================================== -->
+
+    <section
+        class="jobs-section"
+        id="jobs-section"
+    >
+
+        <div class="section-title">
+
+            <div>
+
+                <span>STEP 04</span>
+
+                <h2>
+                    Live Jobs For You
+                </h2>
+
+                <p>
+                    Current openings matched against
+                    your resume skills.
+                </p>
+
+            </div>
+
+
+            <div class="live-indicator">
+
+                <span></span>
+
+                LIVE JOB MARKET
+
+            </div>
+
+        </div>
+
+
+        <div class="job-controls">
+
+            <input
+                id="jobRole"
+                type="text"
+                placeholder="Target role e.g. Python Developer"
+            >
+
+
+            <input
+                id="jobLocation"
+                type="text"
+                placeholder="Location e.g. Hyderabad / Remote"
+            >
+
+
+            <select id="jobDays">
+
+                <option value="1">
+                    Last 24 hours
+                </option>
+
+                <option value="3">
+                    Last 3 days
+                </option>
+
+                <option
+                    value="7"
+                    selected
+                >
+                    Last 7 days
+                </option>
+
+                <option value="30">
+                    Last 30 days
+                </option>
+
+            </select>
+
+
+            <button id="searchJobsBtn">
+                Find Jobs →
+            </button>
+
+        </div>
+
+
+        <div
+            id="jobsContainer"
+            class="jobs-grid"
+        >
+
+            <div class="empty-large">
+
+                <div>
+                    🔎
+                </div>
+
+                <h3>
+                    No jobs loaded yet
+                </h3>
+
+                <p>
+                    Analyze your resume first,
+                    then search for current jobs.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ROADMAP
+    ================================================== -->
+
+    <section
+        class="roadmap-section"
+        id="roadmap-section"
+    >
+
+        <div class="section-title center">
+
+            <span>STEP 05</span>
+
+            <h2>
+                Your Career Roadmap
+            </h2>
+
+            <p>
+                A personalized path from your current
+                skills to your target career.
+            </p>
+
+        </div>
+
+
+        <div class="roadmap">
+
+            <div class="roadmap-line"></div>
+
+
+            <div class="roadmap-card">
+
+                <div class="roadmap-number">
+                    01
+                </div>
+
+                <div>
+
+                    <span>CURRENT PROFILE</span>
+
+                    <h3>
+                        Understand Your Strengths
+                    </h3>
+
+                    <p>
+                        Analyze your existing education,
+                        skills and projects.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="roadmap-card">
+
+                <div class="roadmap-number">
+                    02
+                </div>
+
+                <div>
+
+                    <span>SKILL GAP</span>
+
+                    <h3>
+                        Learn Missing Skills
+                    </h3>
+
+                    <p>
+                        Focus on technologies demanded
+                        by your target roles.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="roadmap-card">
+
+                <div class="roadmap-number">
+                    03
+                </div>
+
+                <div>
+
+                    <span>PROJECTS</span>
+
+                    <h3>
+                        Build Real Projects
+                    </h3>
+
+                    <p>
+                        Turn your learning into
+                        portfolio-ready projects.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="roadmap-card">
+
+                <div class="roadmap-number">
+                    04
+                </div>
+
+                <div>
+
+                    <span>JOB READY</span>
+
+                    <h3>
+                        Apply & Interview
+                    </h3>
+
+                    <p>
+                        Match with relevant jobs and
+                        prepare for interviews.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+</main>
+
+
+
+<script>
+
+const resumeFile =
+    document.getElementById("resumeFile");
+
+const selectedFile =
+    document.getElementById("selectedFile");
+
+
+resumeFile.addEventListener(
+    "change",
+    function () {
+
+        if (this.files.length) {
+
+            selectedFile.textContent =
+                this.files[0].name;
+
+            selectedFile.classList.add(
+                "selected"
+            );
+
+        }
+
+    }
+);
+
+
+const uploadForm =
+    document.getElementById(
+        "resumeUploadForm"
+    );
+
+
+uploadForm.addEventListener(
+    "submit",
+    function (event) {
+
+        event.preventDefault();
+
+
+        if (!resumeFile.files.length) {
+
+            alert(
+                "Please select your resume first."
+            );
+
+            return;
+
+        }
+
+
+        const panel =
+            document.getElementById(
+                "analysisPanel"
+            );
+
+
+        panel.classList.add("show");
+
+
+        panel.scrollIntoView({
+            behavior: "smooth"
+        });
+
+
+        let progress = 0;
+
+
+        const bar =
+            document.getElementById(
+                "progressBar"
+            );
+
+
+        const text =
+            document.getElementById(
+                "progressText"
+            );
+
+
+        const steps =
+            document.querySelectorAll(
+                ".analysis-step"
+            );
+
+
+        const timer =
+            setInterval(
+                function () {
+
+                    progress += 2;
+
+
+                    if (progress > 100) {
+                        progress = 100;
+                    }
+
+
+                    bar.style.width =
+                        progress + "%";
+
+
+                    text.textContent =
+                        progress + "%";
+
+
+                    if (progress >= 25) {
+                        steps[0].classList.add(
+                            "completed"
+                        );
+                    }
+
+
+                    if (progress >= 50) {
+                        steps[1].classList.add(
+                            "completed"
+                        );
+                    }
+
+
+                    if (progress >= 75) {
+                        steps[2].classList.add(
+                            "completed"
+                        );
+                    }
+
+
+                    if (progress >= 95) {
+                        steps[3].classList.add(
+                            "completed"
+                        );
+                    }
+
+
+                    if (progress >= 100) {
+
+                        clearInterval(timer);
+
+                    }
+
+                },
+                80
+            );
+
+    }
+);
+
+</script>
+<script
+    src="{{ url_for('static', filename='resume.js') }}"
+></script>
+
+</body>
+</html>

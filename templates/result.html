@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PDF AI Analysis</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='result.css') }}"
+    >
+
+    <!-- =====================================================
+         PDF GENERATOR
+    ====================================================== -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LEFT SIDEBAR
+===================================================== -->
+
+<aside class="side-navigation">
+
+    <div class="navigation-title">
+
+        Navigation
+
+        <button
+            type="button"
+            class="sidebar-toggle"
+            onclick="toggleSidebar()"
+            aria-label="Toggle Navigation">
+
+            ☰
+
+        </button>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('home') }}"
+        class="side-nav-item">
+
+        <span class="nav-icon">🏠</span>
+
+        <span>Home</span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="side-nav-item dashboard-link">
+
+        <span class="nav-icon">📊</span>
+
+        <span>Dashboard</span>
+
+    </a>
+
+
+    <a
+    href="{{ url_for('history') }}"
+    class="side-nav-item"
+>
+    <span class="nav-icon">📄</span>
+    <span>PDF History</span>
+</a>
+
+
+    {% if pdf_id %}
+
+   <a
+    href="{{ url_for('qa_history_page', pdf_id=pdf_id) }}"
+    class="side-nav-item"
+>
+    <span class="nav-icon">💬</span>
+    <span>AI Assistant</span>
+</a>
+
+    {% else %}
+
+    <a
+        href="{{ url_for('history') }}"
+        class="side-nav-item">
+
+        <span class="nav-icon">💬</span>
+
+        <span>Q&A History</span>
+
+    </a>
+
+    {% endif %}
+
+
+    <a
+    href="{{ url_for('pdf_summarizer') }}"
+    class="side-nav-item upload-link">
+
+    <span class="nav-icon">📤</span>
+    <span>Upload PDF</span>
+
+</a>
+
+
+    <!-- =================================================
+         TEST RETRIEVAL REMOVED
+    ================================================== -->
+
+
+    <div class="ai-status">
+
+        <span class="status-dot"></span>
+
+        <span>AI Assistant Ready</span>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<section class="page-header">
+
+    <div class="header-icon">
+
+        📚
+
+    </div>
+
+
+    <div>
+
+        <h1>
+            PDF AI Assistant
+        </h1>
+
+        <p>
+            📄 {{ filename }}
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DOWNLOAD + SHARE ALL
+===================================================== -->
+
+<section class="card complete-actions-card">
+
+    <div class="section-title">
+
+        <span>📦</span>
+
+        <div>
+
+            <h2>
+                Complete PDF Report
+            </h2>
+
+            <p>
+                Download or share all generated AI content together.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="complete-action-buttons">
+
+        <button
+            type="button"
+            class="complete-action-btn download-all-btn"
+            id="downloadAllButton"
+            onclick="downloadAllContent()">
+
+            📥
+            <span>Download All</span>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="complete-action-btn share-all-btn"
+            id="shareAllButton"
+            onclick="shareAllContent()">
+
+            📤
+            <span>Share All</span>
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="actionStatus"
+        class="action-status">
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI FEATURES
+===================================================== -->
+
+<section class="card features-card">
+
+    <div class="section-title">
+
+        <span>🤖</span>
+
+        <div>
+
+            <h2>
+                AI Features
+            </h2>
+
+            <p>
+                Choose an AI feature to analyze your PDF.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="feature-buttons">
+
+
+        <!-- SMART Q&A -->
+
+        <button
+            type="button"
+            class="feature-button smart-button"
+            onclick="scrollToQuestions()">
+
+            💬
+
+            <span>
+                Smart PDF Q&A
+            </span>
+
+        </button>
+
+
+
+        <!-- AI ANALYSIS -->
+
+        <button
+            type="button"
+            class="feature-button analysis-button"
+            id="analysisButton"
+            onclick="generateAnalysis()">
+
+            🧠
+
+            <span>
+                AI Analysis
+            </span>
+
+        </button>
+
+
+
+        <!-- CHAPTER SUMMARY -->
+
+        <button
+            type="button"
+            class="feature-button chapter-button"
+            id="chapterButton"
+            onclick="generateChapterSummary()">
+
+            📖
+
+            <span>
+                Chapter-wise Summary
+            </span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI ANALYSIS
+===================================================== -->
+
+<section
+    class="card result-card"
+    id="ai-analysis">
+
+
+    <div class="section-title">
+
+        <span>🧠</span>
+
+        <div>
+
+            <h2>
+                AI Analysis
+            </h2>
+
+            <p>
+                AI-generated analysis of your uploaded PDF.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <div
+        id="analysisResult"
+        class="result-content">
+
+        <div class="empty-message">
+
+            ⚠️ Click
+            <strong>AI Analysis</strong>
+            above to generate analysis.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CHAPTER SUMMARY
+===================================================== -->
+
+<section
+    class="card result-card"
+    id="chapter-summary">
+
+
+    <div class="section-title">
+
+        <span>📖</span>
+
+        <div>
+
+            <h2>
+                Chapter-wise Summary
+            </h2>
+
+            <p>
+                Chapter and section-wise summary of your PDF.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <div
+        id="chapterResult"
+        class="result-content">
+
+        <div class="empty-message">
+
+            ⚠️ Click
+            <strong>Chapter-wise Summary</strong>
+            above to generate summary.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SMART PDF QUESTIONS
+===================================================== -->
+
+<div
+    class="pdf-question-box"
+    id="smart-qa">
+
+
+    <h2>
+        📚 Smart PDF Questions
+    </h2>
+
+
+    <p>
+        Select a question to analyze your uploaded PDF
+    </p>
+
+
+
+    <div class="question-grid">
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('Give me a short summary of this PDF')">
+
+            📌 Summarize PDF
+
+        </button>
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('What are the most important topics in this PDF?')">
+
+            ⭐ Important Topics
+
+        </button>
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('Generate the most important exam questions from this PDF')">
+
+            📝 Exam Questions
+
+        </button>
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('Give me the key points from this PDF')">
+
+            🔑 Key Points
+
+        </button>
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('Explain the important concepts in this PDF in simple words')">
+
+            📖 Explain Topics
+
+        </button>
+
+
+        <button
+            type="button"
+            class="question-btn"
+            onclick="askPDF('Generate 10 important questions with answers from this PDF')">
+
+            ❓ 10 Questions
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =================================================
+         CURRENT AI ANSWER
+    ================================================== -->
+
+    <div
+        id="pdfAnswer"
+        class="pdf-answer">
+
+        <span>
+            🤖 AI answer will appear here...
+        </span>
+
+    </div>
+
+
+    <!-- =================================================
+         COMPLETE Q&A HISTORY
+    ================================================== -->
+
+    <div
+        id="qaHistory"
+        class="qa-history">
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     EXTRACTED TEXT
+===================================================== -->
+
+<div
+    class="card"
+    id="extracted-text">
+
+
+    <h2>
+        📄 Extracted Text
+    </h2>
+
+
+    <p>
+
+        Text successfully extracted from:
+
+        <strong>
+            {{ filename }}
+        </strong>
+
+    </p>
+
+
+    <hr>
+
+
+    {% if pdf_text %}
+
+        <pre class="extracted-content">
+{{ pdf_text }}
+        </pre>
+
+    {% else %}
+
+        <p>
+
+            ⚠️ No text could be extracted from this PDF.
+
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- =====================================================
+     UPLOAD ANOTHER
+===================================================== -->
+
+<div class="bottom-action">
+
+    <a href="{{ url_for('pdf_summarizer') }}">
+
+        ⬅ Upload Another PDF
+
+    </a>
+
+</div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   PDF FILENAME
+===================================================== */
+
+const PDF_FILENAME = {{ filename|tojson }};
+
+
+
+/* =====================================================
+   STORE GENERATED CONTENT
+===================================================== */
+
+let completeAnalysis = "";
+
+let completeChapterSummary = "";
+
+let qaHistoryData = [];
+
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar() {
+
+    document.body.classList.toggle(
+        "sidebar-closed"
+    );
+
+}
+
+
+
+/* =====================================================
+   SCROLL TO SMART QUESTIONS
+===================================================== */
+
+function scrollToQuestions() {
+
+    const section =
+        document.getElementById("smart-qa");
+
+    if (section) {
+
+        section.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }
+
+}
+
+
+
+/* =====================================================
+   FORMAT AI ANSWER SAFELY
+===================================================== */
+
+function formatAnswer(text) {
+
+    if (!text) {
+
+        return "No answer generated.";
+
+    }
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent = text;
+
+
+    return div.innerHTML
+        .replace(/\n/g, "<br>");
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(text) {
+
+    if (!text) {
+
+        return "";
+
+    }
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent = text;
+
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =====================================================
+   FETCH JSON SAFELY
+===================================================== */
+
+async function getJSON(response) {
+
+    const contentType =
+        response.headers.get("content-type") || "";
+
+
+    if (!contentType.includes("application/json")) {
+
+        const text =
+            await response.text();
+
+
+        throw new Error(
+
+            "Server returned non-JSON response:\n" +
+            text.substring(0, 500)
+
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (!response.ok) {
+
+        throw new Error(
+
+            data.error ||
+            "Server request failed."
+
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =====================================================
+   AI ANALYSIS
+===================================================== */
+
+async function generateAnalysis() {
+
+
+    const resultBox =
+        document.getElementById(
+            "analysisResult"
+        );
+
+
+    const button =
+        document.getElementById(
+            "analysisButton"
+        );
+
+
+    resultBox.innerHTML = `
+
+        <div class="loading-answer">
+
+            🤖
+            <strong>
+                AI is analyzing your PDF...
+            </strong>
+
+            <br><br>
+
+            <small>
+                Please wait while Gemini analyzes the document.
+            </small>
+
+        </div>
+
+    `;
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        ⏳
+        <span>
+            Analyzing...
+        </span>
+
+    `;
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "filename",
+        PDF_FILENAME
+    );
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                "{{ url_for('generate_analysis') }}",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+
+                    },
+
+                    body: formData
+
+                }
+
+            );
+
+
+        const data =
+            await getJSON(response);
+
+
+        console.log(
+            "AI ANALYSIS RESPONSE:",
+            data
+        );
+
+
+        if (data.success) {
+
+
+            completeAnalysis =
+                data.answer || "";
+
+
+            resultBox.innerHTML = `
+
+                <div class="answer-title">
+
+                    🤖 AI Analysis
+
+                </div>
+
+
+                <div class="generated-answer">
+
+                    ${formatAnswer(
+                        completeAnalysis
+                    )}
+
+                </div>
+
+            `;
+
+
+            document
+                .getElementById("ai-analysis")
+                .scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+
+        } else {
+
+
+            resultBox.innerHTML = `
+
+                <div class="error-answer">
+
+                    ❌
+
+                    ${formatAnswer(
+
+                        data.error ||
+                        "Unable to generate AI analysis."
+
+                    )}
+
+                </div>
+
+            `;
+
+        }
+
+
+    } catch (error) {
+
+
+        console.error(
+            "ANALYSIS ERROR:",
+            error
+        );
+
+
+        resultBox.innerHTML = `
+
+            <div class="error-answer">
+
+                ❌
+                <strong>
+                    AI Analysis failed
+                </strong>
+
+                <br><br>
+
+                ${formatAnswer(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+
+    } finally {
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            🧠
+
+            <span>
+                AI Analysis
+            </span>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CHAPTER-WISE SUMMARY
+===================================================== */
+
+async function generateChapterSummary() {
+
+
+    const resultBox =
+        document.getElementById(
+            "chapterResult"
+        );
+
+
+    const button =
+        document.getElementById(
+            "chapterButton"
+        );
+
+
+    resultBox.innerHTML = `
+
+        <div class="loading-answer">
+
+            🤖
+
+            <strong>
+                Generating chapter-wise summary...
+            </strong>
+
+            <br><br>
+
+            <small>
+                Gemini is analyzing your PDF chapters and sections.
+            </small>
+
+        </div>
+
+    `;
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        ⏳
+
+        <span>
+            Generating...
+        </span>
+
+    `;
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "filename",
+        PDF_FILENAME
+    );
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                "{{ url_for('chapter_summary') }}",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+
+                    },
+
+                    body: formData
+
+                }
+
+            );
+
+
+        const data =
+            await getJSON(response);
+
+
+        console.log(
+            "CHAPTER SUMMARY RESPONSE:",
+            data
+        );
+
+
+        if (data.success) {
+
+
+            completeChapterSummary =
+                data.answer || "";
+
+
+            resultBox.innerHTML = `
+
+                <div class="answer-title">
+
+                    📖 Chapter-wise Summary
+
+                </div>
+
+
+                <div class="generated-answer">
+
+                    ${formatAnswer(
+                        completeChapterSummary
+                    )}
+
+                </div>
+
+            `;
+
+
+            document
+                .getElementById("chapter-summary")
+                .scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+
+        } else {
+
+
+            resultBox.innerHTML = `
+
+                <div class="error-answer">
+
+                    ❌
+
+                    ${formatAnswer(
+
+                        data.error ||
+                        "Unable to generate chapter summary."
+
+                    )}
+
+                </div>
+
+            `;
+
+        }
+
+
+    } catch (error) {
+
+
+        console.error(
+            "CHAPTER SUMMARY ERROR:",
+            error
+        );
+
+
+        resultBox.innerHTML = `
+
+            <div class="error-answer">
+
+                ❌
+
+                <strong>
+                    Chapter Summary failed
+                </strong>
+
+                <br><br>
+
+                ${formatAnswer(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+
+    } finally {
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            📖
+
+            <span>
+                Chapter-wise Summary
+            </span>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SMART PDF QUESTION
+===================================================== */
+
+async function askPDF(question) {
+
+    const answerBox =
+        document.getElementById("pdfAnswer");
+
+    answerBox.innerHTML = `
+        <div class="loading-answer">
+            🤖
+            <strong>
+                AI is analyzing your PDF...
+            </strong>
+            <br><br>
+            <small>
+                Please wait...
+            </small>
+        </div>
+    `;
+
+    const formData = new FormData();
+
+    formData.append(
+        "question",
+        question
+    );
+
+    formData.append(
+        "filename",
+        PDF_FILENAME
+    );
+
+    formData.append(
+        "pdf_id",
+        PDF_ID
+    );
+
+    formData.append(
+        "chat_id",
+        CHAT_ID
+    );
+
+    console.log(
+        "SMART ASK DATA:",
+        {
+            question: question,
+            pdf_id: PDF_ID,
+            chat_id: CHAT_ID,
+            filename: PDF_FILENAME
+        }
+    );
+
+    try {
+
+        const response = await fetch(
+            "{{ url_for('smart_ask') }}",
+            {
+                method: "POST",
+
+                headers: {
+                    "X-Requested-With":
+                        "XMLHttpRequest"
+                },
+
+                body: formData
+            }
+        );
+
+        const data =
+            await getJSON(response);
+
+        console.log(
+            "SMART PDF RESPONSE:",
+            data
+        );
+
+        if (data.success) {
+
+            const answer =
+                data.answer || "";
+
+            qaHistoryData.push({
+                question: question,
+                answer: answer,
+                time:
+                    new Date().toLocaleString()
+            });
+
+            answerBox.innerHTML = `
+                <div class="answer-title">
+                    🤖 AI Answer
+                </div>
+
+                <div class="generated-answer">
+                    ${formatAnswer(answer)}
+                </div>
+            `;
+
+            renderQAHistory();
+
+        } else {
+
+            answerBox.innerHTML = `
+                <div class="error-answer">
+                    ❌
+                    ${escapeHTML(
+                        data.error ||
+                        "Unable to generate answer."
+                    )}
+                </div>
+            `;
+        }
+
+    } catch (error) {
+
+        console.error(
+            "SMART ASK ERROR:",
+            error
+        );
+
+        answerBox.innerHTML = `
+            <div class="error-answer">
+                ❌
+                <strong>
+                    Something went wrong.
+                </strong>
+                <br><br>
+                ${escapeHTML(
+                    error.message
+                )}
+            </div>
+        `;
+    }
+}
+
+
+
+/* =====================================================
+   RENDER COMPLETE Q&A HISTORY
+===================================================== */
+
+function renderQAHistory() {
+
+
+    const historyBox =
+        document.getElementById(
+            "qaHistory"
+        );
+
+
+    if (
+        !qaHistoryData ||
+        qaHistoryData.length === 0
+    ) {
+
+        historyBox.innerHTML = "";
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <div class="qa-history-title">
+
+            💬 Smart PDF Q&A History
+
+        </div>
+
+    `;
+
+
+    qaHistoryData.forEach(
+        (item, index) => {
+
+
+            html += `
+
+                <div class="qa-history-item">
+
+                    <div class="qa-question">
+
+                        <strong>
+                            Q${index + 1}.
+                        </strong>
+
+                        ${escapeHTML(
+                            item.question
+                        )}
+
+                    </div>
+
+
+                    <div class="qa-answer">
+
+                        <strong>
+                            🤖 Answer:
+                        </strong>
+
+                        <br><br>
+
+                        ${formatAnswer(
+                            item.answer
+                        )}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    historyBox.innerHTML = html;
+
+}
+
+
+
+/* =====================================================
+   GET EXTRACTED PDF TEXT
+===================================================== */
+
+function getExtractedText() {
+
+
+    const element =
+        document.querySelector(
+            ".extracted-content"
+        );
+
+
+    if (!element) {
+
+        return "No extracted text available.";
+
+    }
+
+
+    return element.innerText || "";
+
+}
+
+
+
+/* =====================================================
+   BUILD COMPLETE REPORT
+===================================================== */
+
+function buildCompleteReport() {
+
+
+    const report =
+        document.createElement("div");
+
+
+    report.id =
+        "complete-pdf-report";
+
+
+    report.style.background =
+        "#ffffff";
+
+
+    report.style.color =
+        "#111111";
+
+
+    report.style.padding =
+        "40px";
+
+
+    report.style.fontFamily =
+        "Arial, sans-serif";
+
+
+    report.style.lineHeight =
+        "1.6";
+
+
+    report.style.width =
+        "800px";
+
+
+
+    /* =================================================
+       TITLE
+    ================================================== */
+
+    const title =
+        document.createElement("div");
+
+
+    title.innerHTML = `
+
+        <h1 style="
+            font-size:28px;
+            margin-bottom:8px;
+            color:#111;
+        ">
+
+            📚 PDF AI Assistant Report
+
+        </h1>
+
+
+        <p style="
+            font-size:16px;
+            margin-top:0;
+        ">
+
+            <strong>PDF:</strong>
+            ${escapeHTML(PDF_FILENAME)}
+
+        </p>
+
+
+        <p style="
+            color:#666;
+            font-size:13px;
+        ">
+
+            Generated on:
+            ${new Date().toLocaleString()}
+
+        </p>
+
+        <hr>
+
+    `;
+
+
+    report.appendChild(title);
+
+
+
+    /* =================================================
+       HOME / PDF INFORMATION
+    ================================================== */
+
+    const pdfInfo =
+        document.createElement("section");
+
+
+    pdfInfo.innerHTML = `
+
+        <h2>
+            🏠 PDF Information
+        </h2>
+
+        <p>
+
+            <strong>File Name:</strong>
+            ${escapeHTML(PDF_FILENAME)}
+
+        </p>
+
+        <p>
+
+            This report contains the complete AI-generated
+            content for this PDF including analysis,
+            chapter summary, Smart PDF Q&A and extracted text.
+
+        </p>
+
+        <hr>
+
+    `;
+
+
+    report.appendChild(pdfInfo);
+
+
+
+    /* =================================================
+       AI ANALYSIS
+    ================================================== */
+
+    const analysis =
+        document.createElement("section");
+
+
+    analysis.style.pageBreakInside =
+        "avoid";
+
+
+    analysis.innerHTML = `
+
+        <h2>
+            🧠 AI Analysis
+        </h2>
+
+        <div style="
+            white-space:pre-wrap;
+            font-size:14px;
+        ">
+
+            ${
+                completeAnalysis
+                ?
+                escapeHTML(completeAnalysis)
+                :
+                "AI Analysis was not generated."
+            }
+
+        </div>
+
+        <hr>
+
+    `;
+
+
+    report.appendChild(analysis);
+
+
+
+    /* =================================================
+       CHAPTER SUMMARY
+    ================================================== */
+
+    const chapter =
+        document.createElement("section");
+
+
+    chapter.innerHTML = `
+
+        <h2>
+            📖 Chapter-wise Summary
+        </h2>
+
+        <div style="
+            white-space:pre-wrap;
+            font-size:14px;
+        ">
+
+            ${
+                completeChapterSummary
+                ?
+                escapeHTML(
+                    completeChapterSummary
+                )
+                :
+                "Chapter-wise Summary was not generated."
+            }
+
+        </div>
+
+        <hr>
+
+    `;
+
+
+    report.appendChild(chapter);
+
+
+
+    /* =================================================
+       SMART PDF Q&A
+    ================================================== */
+
+    const qa =
+        document.createElement("section");
+
+
+    let qaHTML = `
+
+        <h2>
+            💬 Smart PDF Q&A
+        </h2>
+
+    `;
+
+
+    if (
+        qaHistoryData.length === 0
+    ) {
+
+
+        qaHTML += `
+
+            <p>
+                No Smart PDF questions were asked.
+            </p>
+
+        `;
+
+
+    } else {
+
+
+        qaHistoryData.forEach(
+            (item, index) => {
+
+
+                qaHTML += `
+
+                    <div style="
+                        margin-bottom:25px;
+                        page-break-inside:avoid;
+                    ">
+
+                        <h3>
+
+                            Q${index + 1}.
+                            ${escapeHTML(
+                                item.question
+                            )}
+
+                        </h3>
+
+
+                        <p style="
+                            white-space:pre-wrap;
+                            font-size:14px;
+                        ">
+
+                            ${escapeHTML(
+                                item.answer
+                            )}
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    qaHTML += `
+        <hr>
+    `;
+
+
+    qa.innerHTML =
+        qaHTML;
+
+
+    report.appendChild(qa);
+
+
+
+    /* =================================================
+       EXTRACTED TEXT
+    ================================================== */
+
+    const extracted =
+        document.createElement("section");
+
+
+    const extractedText =
+        getExtractedText();
+
+
+    extracted.innerHTML = `
+
+        <h2>
+            📄 Extracted PDF Text
+        </h2>
+
+        <div style="
+            white-space:pre-wrap;
+            font-size:11px;
+            line-height:1.5;
+        ">
+
+            ${escapeHTML(
+                extractedText
+            )}
+
+        </div>
+
+    `;
+
+
+    report.appendChild(extracted);
+
+
+    return report;
+
+}
+
+
+
+/* =====================================================
+   DOWNLOAD ALL CONTENT
+===================================================== */
+
+async function downloadAllContent() {
+
+
+    const button =
+        document.getElementById(
+            "downloadAllButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "actionStatus"
+        );
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        ⏳
+        <span>
+            Creating PDF...
+        </span>
+
+    `;
+
+
+    status.innerHTML = `
+
+        🤖 Creating your complete PDF report...
+
+    `;
+
+
+    try {
+
+
+        const report =
+            buildCompleteReport();
+
+
+        /*
+         * Temporarily add report to page
+         * so html2pdf can render it.
+         */
+
+        report.style.position =
+            "fixed";
+
+        report.style.left =
+            "-10000px";
+
+        report.style.top =
+            "0";
+
+
+        document.body.appendChild(
+            report
+        );
+
+
+        const safeFilename =
+            PDF_FILENAME
+                .replace(
+                    /\.pdf$/i,
+                    ""
+                )
+                .replace(
+                    /[^a-zA-Z0-9-_]/g,
+                    "_"
+                );
+
+
+        const filename =
+            `${safeFilename}_Complete_AI_Report.pdf`;
+
+
+        const options = {
+
+            margin: [
+                10,
+                10,
+                10,
+                10
+            ],
+
+            filename: filename,
+
+            image: {
+
+                type: "jpeg",
+
+                quality: 0.98
+
+            },
+
+            html2canvas: {
+
+                scale: 2,
+
+                useCORS: true,
+
+                backgroundColor: "#ffffff"
+
+            },
+
+            jsPDF: {
+
+                unit: "mm",
+
+                format: "a4",
+
+                orientation: "portrait"
+
+            },
+
+            pagebreak: {
+
+                mode: [
+                    "avoid-all",
+                    "css",
+                    "legacy"
+                ]
+
+            }
+
+        };
+
+
+        await html2pdf()
+            .set(options)
+            .from(report)
+            .save();
+
+
+        report.remove();
+
+
+        status.innerHTML = `
+
+            ✅ Complete PDF downloaded successfully.
+
+        `;
+
+
+    } catch (error) {
+
+
+        console.error(
+            "DOWNLOAD ALL ERROR:",
+            error
+        );
+
+
+        status.innerHTML = `
+
+            ❌ Failed to create PDF.
+
+            <br>
+
+            ${escapeHTML(
+                error.message
+            )}
+
+        `;
+
+    } finally {
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            📥
+            <span>
+                Download All
+            </span>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CREATE SHARE TEXT
+===================================================== */
+
+function buildShareText() {
+
+
+    let text = "";
+
+
+    text +=
+        "📚 PDF AI Assistant Report\n\n";
+
+
+    text +=
+        "PDF: " +
+        PDF_FILENAME +
+        "\n\n";
+
+
+    /* AI Analysis */
+
+    text +=
+        "🧠 AI ANALYSIS\n";
+
+    text +=
+        "====================\n\n";
+
+
+    text +=
+        completeAnalysis ||
+        "AI Analysis was not generated.";
+
+
+    text +=
+        "\n\n\n";
+
+
+    /* Chapter Summary */
+
+    text +=
+        "📖 CHAPTER-WISE SUMMARY\n";
+
+    text +=
+        "====================\n\n";
+
+
+    text +=
+        completeChapterSummary ||
+        "Chapter-wise Summary was not generated.";
+
+
+    text +=
+        "\n\n\n";
+
+
+    /* Smart Q&A */
+
+    text +=
+        "💬 SMART PDF Q&A\n";
+
+    text +=
+        "====================\n\n";
+
+
+    if (
+        qaHistoryData.length === 0
+    ) {
+
+
+        text +=
+            "No Smart PDF questions were asked.\n";
+
+
+    } else {
+
+
+        qaHistoryData.forEach(
+            (item, index) => {
+
+
+                text +=
+                    `Q${index + 1}: ${item.question}\n\n`;
+
+
+                text +=
+                    `Answer:\n${item.answer}\n\n`;
+
+
+                text +=
+                    "--------------------\n\n";
+
+            }
+        );
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   SHARE ALL CONTENT
+===================================================== */
+
+async function shareAllContent() {
+
+
+    const button =
+        document.getElementById(
+            "shareAllButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "actionStatus"
+        );
+
+
+    const shareText =
+        buildShareText();
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        ⏳
+        <span>
+            Preparing...
+        </span>
+
+    `;
+
+
+    try {
+
+
+        /*
+         * First try native Web Share.
+         */
+
+        if (
+            navigator.share
+        ) {
+
+
+            await navigator.share({
+
+                title:
+                    `PDF AI Report - ${PDF_FILENAME}`,
+
+                text:
+                    shareText
+
+            });
+
+
+            status.innerHTML = `
+
+                ✅ Report shared successfully.
+
+            `;
+
+
+        } else {
+
+
+            /*
+             * Browser doesn't support native share.
+             * Copy complete content instead.
+             */
+
+            await navigator.clipboard.writeText(
+                shareText
+            );
+
+
+            status.innerHTML = `
+
+                ✅ Complete report copied to clipboard.
+                You can paste and share it anywhere.
+
+            `;
+
+        }
+
+
+    } catch (error) {
+
+
+        console.error(
+            "SHARE ERROR:",
+            error
+        );
+
+
+        /*
+         * User may simply close the share dialog.
+         */
+
+        if (
+            error.name ===
+            "AbortError"
+        ) {
+
+
+            status.innerHTML = `
+
+                ℹ️ Share cancelled.
+
+            `;
+
+
+        } else {
+
+
+            try {
+
+
+                await navigator.clipboard.writeText(
+                    shareText
+                );
+
+
+                status.innerHTML = `
+
+                    ✅ Share is unavailable.
+                    Complete report copied to clipboard.
+
+                `;
+
+
+            } catch (clipboardError) {
+
+
+                status.innerHTML = `
+
+                    ❌ Unable to share or copy the report.
+
+                `;
+
+            }
+
+        }
+
+    } finally {
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            📤
+            <span>
+                Share All
+            </span>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PAGE INITIALIZATION
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        console.log(
+            "PDF AI Assistant loaded."
+        );
+
+        console.log(
+            "PDF:",
+            PDF_FILENAME
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

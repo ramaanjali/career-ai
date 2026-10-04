@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Interviewer</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='interview.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+<div class="interview-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="interview-header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h1>
+                    AI Interviewer
+                </h1>
+
+                <p>
+                    Practice. Improve. Get Interview Ready.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="interview-status">
+
+            <span class="status-dot"></span>
+
+            AI Interview Ready
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="interview-container">
+
+
+        <!-- =====================================
+             LEFT SIDE
+        ====================================== -->
+
+        <section class="interview-main">
+
+
+            <!-- AI -->
+            <div class="ai-section">
+
+                <div class="ai-avatar">
+
+                    <div class="avatar-face">
+                        🤖
+                    </div>
+
+                    <div
+                        class="voice-waves"
+                        id="voiceWaves"
+                    >
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+
+                <h2>
+                    AI Interviewer
+                </h2>
+
+
+                <p
+                    class="ai-status"
+                    id="aiStatus"
+                >
+                    Ready to start your interview
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================
+                 QUESTION
+            ================================== -->
+
+            <div class="question-card">
+
+                <div class="question-header">
+
+                    <span class="question-label">
+                        CURRENT QUESTION
+                    </span>
+
+
+                    <span class="question-number">
+
+                        Question
+
+                        <span id="questionNumber">
+                            1
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="question-content">
+
+                    <p id="questionText">
+
+                        Hello! Good morning.
+                        Please introduce yourself
+                        and tell me about your education,
+                        skills and career goals.
+
+                    </p>
+
+                </div>
+
+
+                <div class="question-category">
+
+                    <span id="questionCategory">
+                        Introduction
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ANSWER / VOICE
+            ================================== -->
+
+            <div class="answer-section">
+
+
+                <div
+                    class="recording-status"
+                    id="recordingStatus"
+                >
+                    Click Start Interview first
+                </div>
+
+
+                <div
+                    class="recording-timer"
+                    id="recordingTimer"
+                >
+                    00:00
+                </div>
+
+
+                <div class="voice-controls">
+
+
+                    <button
+                        type="button"
+                        id="recordButton"
+                        class="record-btn"
+                        disabled
+                    >
+
+                        🎙️ Start Answer
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="stopButton"
+                        class="stop-btn"
+                        disabled
+                    >
+
+                        ⏹ Stop Recording
+
+                    </button>
+
+                </div>
+
+
+                <!-- AUDIO PREVIEW -->
+
+                <audio
+                    id="audioPreview"
+                    controls
+                    hidden
+                ></audio>
+
+
+                <!-- TRANSCRIPT -->
+
+                <div class="transcript-box">
+
+                    <div class="transcript-header">
+
+                        <span>
+                            Live Transcript
+                        </span>
+
+                        <span id="transcriptStatus">
+                            Not started
+                        </span>
+
+                    </div>
+
+
+                    <p id="transcriptText">
+
+                        Start the interview to begin.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ACTIONS
+            ================================== -->
+
+            <div class="interview-actions">
+
+
+                <button
+                    id="startInterviewButton"
+                    class="primary-button"
+                    type="button"
+                >
+
+                    🚀 Start Interview
+
+                </button>
+
+
+                <button
+                    id="nextQuestionButton"
+                    class="secondary-button"
+                    type="button"
+                    disabled
+                >
+
+                    Next Question →
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================
+                 FINAL RESULT
+            ================================== -->
+
+            <div
+                id="finalResult"
+                class="final-result"
+                hidden
+            >
+
+                <div class="final-icon">
+                    🎉
+                </div>
+
+                <h2>
+                    Interview Completed
+                </h2>
+
+                <div class="final-score">
+
+                    <span>
+                        Overall Score
+                    </span>
+
+                    <strong id="overallScore">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <p id="finalInterviewMessage">
+                    Your interview has been completed.
+                </p>
+
+
+                <div class="final-feedback">
+
+                    <h3>
+                        AI Feedback
+                    </h3>
+
+                    <p id="aiFeedback">
+                        --
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="restartInterviewButton"
+                    class="primary-button"
+                >
+
+                    🔄 Restart Interview
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================
+             RIGHT SIDEBAR
+        ====================================== -->
+
+        <aside class="interview-sidebar">
+
+
+            <!-- PROGRESS -->
+
+            <div class="sidebar-card">
+
+                <h3>
+                    Interview Progress
+                </h3>
+
+
+                <div class="progress-info">
+
+                    <span>
+                        Question Progress
+                    </span>
+
+                    <span id="progressText">
+                        1 / 10
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        id="progressFill"
+                        class="progress-fill"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TYPE -->
+
+            <div class="sidebar-card">
+
+                <h3>
+                    Interview Type
+                </h3>
+
+
+                <div class="type-item">
+
+                    <span>
+                        🎯
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Full Interview
+                        </strong>
+
+                        <small>
+                            Resume + Technical + HR
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TOPICS -->
+
+            <div class="sidebar-card">
+
+                <h3>
+                    Interview Topics
+                </h3>
+
+
+                <div class="topic-list">
+
+                    <div class="topic">
+                        <span>✓</span>
+                        Introduction
+                    </div>
+
+                    <div class="topic">
+                        <span>○</span>
+                        Resume
+                    </div>
+
+                    <div class="topic">
+                        <span>○</span>
+                        Technical
+                    </div>
+
+                    <div class="topic">
+                        <span>○</span>
+                        Projects
+                    </div>
+
+                    <div class="topic">
+                        <span>○</span>
+                        Problem Solving
+                    </div>
+
+                    <div class="topic">
+                        <span>○</span>
+                        HR
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AI EVALUATION -->
+
+            <div class="sidebar-card">
+
+                <h3>
+                    AI Evaluation
+                </h3>
+
+
+                <div class="evaluation-item">
+
+                    <span>
+                        Communication
+                    </span>
+
+                    <strong id="communicationScore">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="evaluation-item">
+
+                    <span>
+                        Technical Knowledge
+                    </span>
+
+                    <strong id="technicalScore">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="evaluation-item">
+
+                    <span>
+                        Answer Relevance
+                    </span>
+
+                    <strong id="relevanceScore">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="evaluation-item">
+
+                    <span>
+                        Confidence
+                    </span>
+
+                    <strong id="confidenceScore">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="evaluation-item">
+
+                    <span>
+                        Grammar
+                    </span>
+
+                    <strong id="grammarScore">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+    </main>
+
+</div>
+
+
+
+<script
+    src="{{ url_for('static', filename='interview.js') }}"
+></script>
+
+
+</body>
+
+</html>

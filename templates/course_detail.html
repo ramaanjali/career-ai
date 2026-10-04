@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ course.title }} | CareerAI</title>
+
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='course.css') }}?v=10"
+>
+
+</head>
+
+
+<body>
+
+
+<div class="course-page">
+
+
+    <!-- HEADER -->
+
+    <header class="course-header">
+
+        <a
+            href="{{ url_for('learning_hub') }}"
+            class="back-link"
+        >
+            ← Learning Hub
+        </a>
+
+        <div class="header-brand">
+            ✦ CareerAI
+        </div>
+
+    </header>
+
+
+
+    <!-- HERO -->
+
+    <section class="course-hero">
+
+        <div>
+
+            <span class="category">
+                {{ course.category }}
+            </span>
+
+            <h1>
+                {{ course.title }}
+            </h1>
+
+            <p>
+                {{ course.description }}
+            </p>
+
+            <div class="course-info">
+
+                <span>
+                    📊 {{ course.level }}
+                </span>
+
+                <span>
+                    ⏱ {{ course.duration }}
+                </span>
+
+                <span>
+                    📖 {{ course.total_lessons }} lessons
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="course-big-icon">
+            {{ course.icon }}
+        </div>
+
+    </section>
+
+
+
+    <!-- PROGRESS -->
+
+    <section class="progress-section">
+
+        <div class="progress-heading">
+
+            <strong>
+                Your Progress
+            </strong>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+                class="progress-fill"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- MODULES -->
+
+    <main class="modules-container">
+
+        <div class="modules-heading">
+
+            <span>
+                COURSE CONTENT
+            </span>
+
+            <h2>
+                Modules & Lessons
+            </h2>
+
+        </div>
+
+
+        <div id="modulesContainer">
+
+            {% for module in course.modules %}
+
+            <section class="module-card">
+
+                <div class="module-header">
+
+                    <div>
+
+                        <span>
+                            MODULE {{ loop.index }}
+                        </span>
+
+                        <h3>
+                            {{ module.title }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="lesson-list">
+
+                    {% for lesson in module.lessons %}
+
+                    <a
+                        class="lesson-item"
+                        href="{{ url_for(
+                            'learning_lesson',
+                            course_id=course.id,
+                            lesson_id=lesson.id
+                        ) }}"
+                        data-lesson="{{ lesson.id }}"
+                    >
+
+                        <div class="lesson-number">
+
+                            {{ loop.index }}
+
+                        </div>
+
+
+                        <div class="lesson-info">
+
+                            <strong>
+                                {{ lesson.title }}
+                            </strong>
+
+                            <small>
+                                Lesson
+                            </small>
+
+                        </div>
+
+
+                        <span
+                            class="lesson-status"
+                            data-status="{{ lesson.id }}"
+                        >
+                            →
+                        </span>
+
+                    </a>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+    const courseId =
+        "{{ course.id }}";
+
+
+    const lessons =
+        {{ course.lesson_ids | tojson }};
+
+
+    function getCompletedLessons() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(
+                    "careerai_completed_" +
+                    courseId
+                )
+            ) || [];
+
+        } catch (error) {
+
+            return [];
+
+        }
+
+    }
+
+
+    function updateProgress() {
+
+        const completed =
+            getCompletedLessons();
+
+
+        const total =
+            lessons.length;
+
+
+        const progress =
+            total
+                ? Math.round(
+                    completed.length /
+                    total *
+                    100
+                )
+                : 0;
+
+
+        document.getElementById(
+            "progressText"
+        ).textContent =
+            progress + "%";
+
+
+        document.getElementById(
+            "progressFill"
+        ).style.width =
+            progress + "%";
+
+
+        document
+            .querySelectorAll(
+                "[data-status]"
+            )
+            .forEach(element => {
+
+                const lessonId =
+                    element.dataset.status;
+
+
+                if (
+                    completed.includes(
+                        lessonId
+                    )
+                ) {
+
+                    element.textContent =
+                        "✓";
+
+                    element.classList.add(
+                        "completed"
+                    );
+
+                }
+
+            });
+
+    }
+
+
+    updateProgress();
+
+
+    async function loadLearningProgress(courseId) {
+
+    try {
+
+        const response =
+            await fetch(`/api/learning-progress/${courseId}`);
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+            return;
+        }
+
+        const completedLessons =
+            data.completed_lessons || [];
+
+        completedLessons.forEach(function(lessonId) {
+
+            const lessonElement =
+                document.querySelector(
+                    `[data-lesson-id="${lessonId}"]`
+                );
+
+            if (lessonElement) {
+
+                lessonElement.classList.add("completed");
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Progress loading error:",
+            error
+        );
+    }
+}
+
+</script>
+
+
+</body>
+
+</html>

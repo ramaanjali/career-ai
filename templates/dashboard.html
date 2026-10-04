@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PDF AI Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='dashboard.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-header">
+
+            <div class="logo">
+                📚
+            </div>
+
+            <div>
+
+                <h2>
+                    PDF AI
+                </h2>
+
+                <span>
+                    Study Assistant
+                </span>
+
+            </div>
+
+            <button
+                class="close-btn"
+                id="closeSidebar"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+
+        <div class="navigation-title">
+
+            Navigation
+
+        </div>
+
+
+
+        <nav class="sidebar-nav">
+
+
+            <!-- HOME -->
+
+            <a
+                href="{{ url_for('index') }}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    🏠
+                </span>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item active"
+            >
+
+                <span class="nav-icon">
+                    📊
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+            <!-- PDF HISTORY -->
+
+            <a
+                href="{{ url_for('history') }}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    📄
+                </span>
+
+                <span>
+                    PDF History
+                </span>
+
+            </a>
+
+
+
+            <!-- Q&A HISTORY -->
+
+            <a
+                href="{{ url_for('all_qa_history') }}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    💬
+                </span>
+
+                <span>
+                    Q&A History
+                </span>
+
+            </a>
+
+
+            {% if recent_pdfs %}
+            <a
+                href="{{ url_for('qa_history_page', pdf_id=recent_pdfs[0].id) }}"
+                class="nav-item"
+            >
+                <span class="nav-icon">💬</span>
+                <span>AI Assistant</span>
+            </a>
+            {% else %}
+            <a
+                href="{{ url_for('index') }}"
+                class="nav-item"
+            >
+                <span class="nav-icon">💬</span>
+                <span>AI Assistant</span>
+            </a>
+            {% endif %}
+            <!-- =================================================
+                 UPLOAD PDF
+                 CLICK → INDEX.HTML
+            ================================================== -->
+
+            <a
+                href="{{ url_for('pdf_summarizer') }}"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    📤
+                </span>
+
+                <span>
+                    Upload PDF
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <div class="sidebar-bottom">
+
+            <div class="ai-status">
+
+                <span class="status-dot"></span>
+
+                AI Assistant Ready
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- MOBILE MENU -->
+
+        <button
+            class="menu-btn"
+            id="openSidebar"
+            type="button"
+        >
+            ☰
+        </button>
+
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="dashboard-header">
+
+
+            <div>
+
+                <span class="badge">
+
+                    🤖 AI STUDY ASSISTANT
+
+                </span>
+
+
+                <h1>
+
+                    PDF AI Dashboard
+
+                </h1>
+
+
+                <p>
+
+                    Manage your PDFs, summaries and AI questions
+                    from one place.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 UPLOAD PDF
+                 CLICK → INDEX.HTML
+            ================================================== -->
+
+            <a
+                href="{{ url_for('index') }}"
+                class="upload-btn"
+            >
+
+                📤 Upload PDF
+
+            </a>
+
+
+        </header>
+
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <section class="stats-grid">
+
+
+            <!-- TOTAL PDFS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+                    📄
+
+                </div>
+
+
+                <div>
+
+                    <p>
+                        Total PDFs
+                    </p>
+
+                    <h2>
+
+                        {{ total_pdfs or 0 }}
+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- QUESTIONS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+                    💬
+
+                </div>
+
+
+                <div>
+
+                    <p>
+                        Questions Asked
+                    </p>
+
+                    <h2>
+
+                        {{ total_questions or 0 }}
+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TOTAL WORDS -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+                    📚
+
+                </div>
+
+
+                <div>
+
+                    <p>
+                        Total Words
+                    </p>
+
+                    <h2>
+
+                        {{ total_words or 0 }}
+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- AI FEATURES -->
+
+            <div class="stat-card">
+
+
+                <div class="stat-icon">
+
+                    🧠
+
+                </div>
+
+
+                <div>
+
+                    <p>
+                        AI Features
+                    </p>
+
+                    <h2>
+                        4+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             QUICK ACTIONS
+        ====================================================== -->
+
+        <section class="section">
+
+
+            <div class="section-title">
+
+                ⚡ Quick Actions
+
+            </div>
+
+
+
+            <div class="quick-grid">
+
+
+                <!-- PDF HISTORY -->
+
+                <a
+                    href="{{ url_for('history') }}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        📄
+
+                    </div>
+
+
+                    <h3>
+
+                        PDF History
+
+                    </h3>
+
+
+                    <p>
+
+                        View all uploaded PDFs
+
+                    </p>
+
+                </a>
+
+
+
+                <!-- Q&A HISTORY -->
+
+                <a
+                    href="{{ url_for('all_qa_history') }}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        💬
+
+                    </div>
+
+
+                    <h3>
+
+                        Q&A History
+
+                    </h3>
+
+
+                    <p>
+
+                        View your previous questions
+
+                    </p>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     UPLOAD PDF
+                     CLICK → INDEX.HTML
+                ================================================== -->
+
+                <a
+                    href="{{ url_for('index') }}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        📤
+
+                    </div>
+
+
+                    <h3>
+
+                        Upload PDF
+
+                    </h3>
+
+
+                    <p>
+
+                        Analyze a new document
+
+                    </p>
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             RECENT PDFs
+        ====================================================== -->
+
+        <section class="section">
+
+
+            <div class="section-heading">
+
+
+                <div class="section-title">
+
+                    🕘 Recent PDFs
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('history') }}"
+                >
+
+                    View All →
+
+                </a>
+
+
+            </div>
+
+
+
+            <div class="recent-container">
+
+
+                {% if recent_pdfs %}
+
+
+                    {% for pdf in recent_pdfs %}
+
+
+                        <div class="pdf-row">
+
+
+                            <div class="pdf-info">
+
+
+                                <div class="pdf-icon">
+
+                                    📄
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <h3>
+
+                                        {{ pdf.filename }}
+
+                                    </h3>
+
+
+                                    <p>
+
+                                        {{ pdf.uploaded_at }}
+
+                                    </p>
+
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <a
+                                href="{{ url_for('pdf_details', pdf_id=pdf.id) }}"
+                                class="open-btn"
+                            >
+
+                                Open
+
+                            </a>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <!-- =================================================
+                         EMPTY PDF STATE
+                    ================================================== -->
+
+                    <div class="empty-state">
+
+
+                        <div>
+
+                            📂
+
+                        </div>
+
+
+                        <h3>
+
+                            No PDFs uploaded yet
+
+                        </h3>
+
+
+                        <p>
+
+                            Upload your first PDF to start learning.
+
+                        </p>
+
+
+
+                        <!-- UPLOAD → INDEX.HTML -->
+
+                        <a
+                            href="{{ url_for('index') }}"
+                            class="upload-btn"
+                        >
+
+                            📤 Upload PDF
+
+                        </a>
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SCRIPT
+====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+
+</body>
+
+</html>

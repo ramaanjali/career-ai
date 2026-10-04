@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Builder</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='resume_builder.css') }}">
+</head>
+
+<body>
+
+<header class="top-header">
+    <div class="logo">Resume<span>Builder</span></div>
+
+    <nav>
+        <a href="{{ url_for('resume_recommendation') }}">Dashboard</a>
+        <a href="#">My Resume</a>
+    </nav>
+</header>
+
+
+<main class="builder-container">
+
+    <!-- LEFT SIDE -->
+    <section class="editor-section">
+
+        <div class="page-title">
+            <h1>Build Your Resume</h1>
+            <p>Create a professional resume step by step.</p>
+        </div>
+
+
+        <!-- PERSONAL DETAILS -->
+        <div class="form-card">
+
+            <h2>Personal Information</h2>
+
+            <div class="form-grid">
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Your full name">
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="your@email.com">
+                </div>
+
+                <div class="input-group">
+                    <label>Phone</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        placeholder="+91 XXXXX XXXXX">
+                </div>
+
+                <div class="input-group">
+                    <label>Location</label>
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="City, State">
+                </div>
+
+                <div class="input-group">
+                    <label>LinkedIn</label>
+                    <input
+                        type="text"
+                        id="linkedin"
+                        placeholder="LinkedIn URL">
+                </div>
+
+                <div class="input-group">
+                    <label>GitHub</label>
+                    <input
+                        type="text"
+                        id="github"
+                        placeholder="GitHub URL">
+                </div>
+
+            </div>
+
+            <div class="input-group full-width">
+                <label>Professional Summary</label>
+
+                <textarea
+                    id="summary"
+                    rows="4"
+                    placeholder="Write a short professional summary..."></textarea>
+            </div>
+
+        </div>
+
+
+        <!-- EDUCATION -->
+        <div class="form-card">
+
+            <div class="section-heading">
+                <h2>Education</h2>
+
+                <button
+                    type="button"
+                    class="add-btn"
+                    id="addEducation">
+                    + Add Education
+                </button>
+            </div>
+
+            <div id="educationContainer"></div>
+
+        </div>
+
+
+        <!-- SKILLS -->
+        <div class="form-card">
+
+            <h2>Skills</h2>
+
+            <div class="input-group">
+
+                <label>
+                    Skills
+                </label>
+
+                <textarea
+                    id="skills"
+                    rows="3"
+                    placeholder="Python, HTML, CSS, JavaScript, MySQL"></textarea>
+
+                <small>
+                    Separate skills using commas.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROJECTS -->
+        <div class="form-card">
+
+            <div class="section-heading">
+
+                <h2>Projects</h2>
+
+                <button
+                    type="button"
+                    class="add-btn"
+                    id="addProject">
+                    + Add Project
+                </button>
+
+            </div>
+
+            <div id="projectsContainer"></div>
+
+        </div>
+
+
+        <!-- EXPERIENCE -->
+        <div class="form-card">
+
+            <div class="section-heading">
+
+                <h2>Experience / Internship</h2>
+
+                <button
+                    type="button"
+                    class="add-btn"
+                    id="addExperience">
+                    + Add Experience
+                </button>
+
+            </div>
+
+            <div id="experienceContainer"></div>
+
+        </div>
+
+
+        <!-- CERTIFICATIONS -->
+        <div class="form-card">
+
+            <div class="section-heading">
+
+                <h2>Certifications</h2>
+
+                <button
+                    type="button"
+                    class="add-btn"
+                    id="addCertification">
+                    + Add Certification
+                </button>
+
+            </div>
+
+            <div id="certificationContainer"></div>
+
+        </div>
+
+
+        <div class="action-buttons">
+
+            <button
+                type="button"
+                class="clear-btn"
+                id="clearResume">
+                Clear
+            </button>
+
+            <button
+                type="button"
+                class="preview-btn"
+                id="downloadResume">
+                Download Resume
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT SIDE PREVIEW -->
+    <section class="preview-section">
+
+        <div class="preview-header">
+
+            <h2>Live Preview</h2>
+
+            <span id="saveStatus">
+                Auto Preview
+            </span>
+
+        </div>
+
+
+        <div class="resume-paper" id="resumePreview">
+
+            <div class="resume-header">
+
+                <h1 id="previewName">
+                    Your Name
+                </h1>
+
+                <p id="previewContact">
+                    email@example.com
+                    <span> | </span>
+                    +91 XXXXX XXXXX
+                </p>
+
+                <p id="previewLinks">
+                    LinkedIn | GitHub
+                </p>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewSummaryBlock">
+
+                <h3>PROFESSIONAL SUMMARY</h3>
+
+                <p id="previewSummary">
+                    Your professional summary will appear here.
+                </p>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewEducationBlock">
+
+                <h3>EDUCATION</h3>
+
+                <div id="previewEducation">
+                    <p class="empty-text">
+                        Education details will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewSkillsBlock">
+
+                <h3>SKILLS</h3>
+
+                <p id="previewSkills">
+                    Your skills will appear here.
+                </p>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewProjectsBlock">
+
+                <h3>PROJECTS</h3>
+
+                <div id="previewProjects">
+                    <p class="empty-text">
+                        Projects will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewExperienceBlock">
+
+                <h3>EXPERIENCE</h3>
+
+                <div id="previewExperience">
+                    <p class="empty-text">
+                        Experience will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div
+                class="preview-section-block"
+                id="previewCertificationBlock">
+
+                <h3>CERTIFICATIONS</h3>
+
+                <div id="previewCertifications">
+                    <p class="empty-text">
+                        Certifications will appear here.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="{{ url_for('static', filename='resume_builder.js') }}"></script>
+
+</body>
+</html>
