@@ -490,7 +490,7 @@ screenshots/
 ├── pdf-summraizer.png
 ├── resume-recommendation.png
 🔐 Login Page
-![Login Page](screenshots/login.png)
+![Login Page](screenshots/login_ai.png)
 
 🏠 Dashboard
 
@@ -499,7 +499,7 @@ screenshots/
 
 📄 PDF AI Assistant
 
-![PDF AI ](screenshots/pdf-summraizer.png)
+![PDF AI ](screenshots/pdf_summraizer.png)
 
 
 🎯 Resume Recommendation
